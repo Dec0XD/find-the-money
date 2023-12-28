@@ -28,12 +28,14 @@ information = CTkButton(master=sidebar_frame, text="informações", command=show
 def IniciarJogo():
     pass
     
-CTkLabel(master=app, text="Bem vindo!", text_color="#fff",
-        anchor="w", justify="center", font=("Arial Bold", 24)).pack(anchor="center", pady=(0, 5),
-                                                                    padx=(25, 0))
-CTkLabel(master=app, text="Clique no botão abaixo para configurar o jogo.", text_color="#fff",
-        anchor="w", justify="center", font=("Arial Bold", 24)).pack(anchor="center", pady=(0, 5),
-                                                                    padx=(25, 0))
+CTkLabel(master=app, text="Configuração", text_color="#fff",
+        justify="center", font=("Arial Bold", 24)).pack(anchor="center", pady=(0, 5),padx=(25, 0))
+
+CTkLabel(master=app, text="Insira o percentual de vezes que a nota de R$ 100 deverá aparecer do lado esquerdo.", text_color="#fff",
+        justify="center", font=("Arial Bold", 16)).pack(anchor="center", pady=(0, 5),padx=(25, 0))
+QuantidadeNotaEsquerda = CTkEntry(app, placeholder_text="Apenas Números!")
+QuantidadeNotaEsquerda.pack(padx=20, pady=20)
+
 inciarJogo = CTkButton(master=app, text="inicar Jogo!", text_color="#fff", command=IniciarJogo).pack(anchor="center")
 
 
