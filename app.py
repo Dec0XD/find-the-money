@@ -37,5 +37,10 @@ CTkLabel(master=app, text="Clique no botão abaixo para configurar o jogo.", tex
 inciarJogo = CTkButton(master=app, text="inicar Jogo!", text_color="#fff", command=IniciarJogo).pack(anchor="center")
 
 
+scrollable_content_frame = CTkScrollableFrame(master=app, fg_color="#000")
+scrollable_content_frame.pack(expand=True, fill="both", padx=20, pady=20)
+
+appframe = CTkFrame(master=scrollable_content_frame, fg_color="transparent")
+appframe.pack(anchor="n", fill="x", padx=27, pady=(0, 0))
 
 app.mainloop()
