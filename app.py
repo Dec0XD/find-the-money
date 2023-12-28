@@ -8,6 +8,10 @@ app.resizable(0, 0)
 
 set_appearance_mode("dark")
 
+def show_information():
+    CTkMessagebox(title="Informações sobre a aplicação", 
+                  message="Informações.")
+
 sidebar_frame = CTkFrame(master=app, fg_color="#070F1F", width=200, height=800, corner_radius=0)
 sidebar_frame.pack_propagate(0)
 sidebar_frame.pack(fill="y", anchor="w", side="left")
@@ -18,6 +22,8 @@ logo_img = CTkImage(dark_image=logo_img_data, light_image=logo_img_data, size=(1
 CTkLabel(master=sidebar_frame, text="", image=logo_img).pack(pady=(38, 0), anchor="center")
 CTkLabel(master=sidebar_frame, text="Para mais informações").pack(pady=(38, 0), anchor="center")
 CTkLabel(master=sidebar_frame, text="clique aqui").pack(pady=(2, 0), anchor="center")
+
+information = CTkButton(master=sidebar_frame, text="informação", command=show_information).pack(pady=(10,0), anchor="center")
 
 
 
