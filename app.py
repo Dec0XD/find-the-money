@@ -1,6 +1,8 @@
 from customtkinter import *
 from CTkMessagebox import CTkMessagebox
 from PIL import Image
+import random
+import time
 
 app = CTk()
 app.geometry("900x600")
@@ -70,5 +72,20 @@ BTNEsquerda.pack(side="left", padx=100, pady=10)
 # Botão da direita
 BTNDireita = CTkButton(master=app, text="Botão da direita")
 BTNDireita.pack(side="right", padx=100, pady=10)
+
+def progreso(i):
+    if i <= 100:
+        progressbar.set(i)
+        print(i)
+        i += 1
+        app.after(50, lambda: progreso(i))  # Chama a função novamente após 50 milissegundos
+    else:
+        print("Concluído!")
+
+progressbar = CTkProgressBar(master=app, width=160, height=20, border_width=2)
+progressbar.place(x=470, y=500)
+
+# Inicia o processo de progresso
+progreso(0)
 
 app.mainloop()
