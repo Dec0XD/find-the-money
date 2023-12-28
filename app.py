@@ -37,6 +37,10 @@ CTkLabel(master=sidebar_frame, text="clique aqui").pack(pady=(2, 0), anchor="cen
 informationApp = CTkButton(master=sidebar_frame, text="informações", command=MostrarInformaçao).pack(pady=(10,0), anchor="center")
 informationJogo = CTkButton(master=sidebar_frame, text="Jogo", command=InfosJogo).pack(pady=(10,0), anchor="center")
 
+from tkinter import Toplevel, Label
+from PIL import Image
+import random
+
 def IniciarJogo():
     # Cria uma nova janela
     new_window = Toplevel(app)
@@ -62,10 +66,12 @@ def IniciarJogo():
     # Define o que acontece quando os botões são pressionados
     def acertou():
         nota_100.configure(image=nota_100_ctk_img)
+        stop_timer()
         new_window.after(2000, reset_timer)
         
     def errou():
         nota_2.configure(image=nota_2_ctk_img)
+        stop_timer()
         new_window.after(2000, reset_timer)
     
     nota_100.configure(command=acertou)
@@ -89,14 +95,22 @@ def IniciarJogo():
             timer_label.config(text="O tempo acabou!")
             new_window.destroy()
     
-    def reset_timer():
-        nonlocal tempo_restante, pausar_temporizador
-        tempo_restante = 5
+    def start_timer():
+        nonlocal pausar_temporizador
         pausar_temporizador = False
         countdown()
     
+    def stop_timer():
+        nonlocal pausar_temporizador
+        pausar_temporizador = True
+    
+    def reset_timer():
+        nonlocal tempo_restante
+        tempo_restante = 5
+        start_timer()
+    
     # Inicia o temporizador
-    countdown()
+    start_timer()
 
 
 
