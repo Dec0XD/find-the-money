@@ -103,7 +103,9 @@ def IniciarJogo():
             new_window.destroy()
     
     def start_timer():
-        nonlocal pausar_temporizador
+        nonlocal tempo_restante, pausar_temporizador
+        tempo_restante = 5
+        timer_label.config(text=f"Tempo restante: {tempo_restante} segundos")
         pausar_temporizador = False
         countdown()
     
