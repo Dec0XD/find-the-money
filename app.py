@@ -23,10 +23,10 @@ CTkLabel(master=sidebar_frame, text="", image=logo_img).pack(pady=(38, 0), ancho
 CTkLabel(master=sidebar_frame, text="Para mais informações").pack(pady=(38, 0), anchor="center")
 CTkLabel(master=sidebar_frame, text="clique aqui").pack(pady=(2, 0), anchor="center")
 
-information = CTkButton(master=sidebar_frame, text="informação", command=show_information).pack(pady=(10,0), anchor="center")
+information = CTkButton(master=sidebar_frame, text="informações", command=show_information).pack(pady=(10,0), anchor="center")
 
 def IniciarJogo():
-    CTkMessagebox(mensage="clicado")
+    pass
     
 CTkLabel(master=app, text="Bem vindo!", text_color="#fff",
         anchor="w", justify="center", font=("Arial Bold", 24)).pack(anchor="center", pady=(0, 5),
@@ -37,10 +37,5 @@ CTkLabel(master=app, text="Clique no botão abaixo para configurar o jogo.", tex
 inciarJogo = CTkButton(master=app, text="inicar Jogo!", text_color="#fff", command=IniciarJogo).pack(anchor="center")
 
 
-scrollable_content_frame = CTkScrollableFrame(master=app, fg_color="#000")
-scrollable_content_frame.pack(expand=True, fill="both", padx=20, pady=20)
-
-appframe = CTkFrame(master=scrollable_content_frame, fg_color="transparent")
-appframe.pack(anchor="n", fill="x", padx=27, pady=(0, 0))
 
 app.mainloop()
