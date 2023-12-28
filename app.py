@@ -65,10 +65,15 @@ def IniciarJogo():
     BTNDireita.pack(side="right", padx=100, pady=10)
     
     # Define qual botão terá a nota de 50 reais
-    nota_50 = random.choice([BTNEsquerda, BTNDireita])
-    nota_2 = BTNDireita if nota_50 == BTNEsquerda else BTNEsquerda
+    percentual_esquerda = int(QuantidadeNotaEsquerda.get()) / 100
+    total_rodadas = int(NumeroRodadas.get())
+    rodadas_esquerda = round(total_rodadas * percentual_esquerda)
+    rodadas = ["esquerda"] * rodadas_esquerda + ["direita"] * (total_rodadas - rodadas_esquerda)
+    random.shuffle(rodadas)
+    print(rodadas, total_rodadas)
+    if rodadas == total_rodadas:
+        new_window.destroy()
     
-    # Define o que acontece quando os botões são pressionados
     def acertou():
         canvas.create_image(205, 55, image=nota_50_photo)
         stop_timer()
@@ -81,8 +86,15 @@ def IniciarJogo():
         new_window.after(2000, lambda: canvas.delete("all"))
         new_window.after(2000, start_timer)
     
-    nota_50.configure(command=acertou)
-    nota_2.configure(command=errou)
+    for rodada in rodadas:
+        if rodada == "esquerda":
+            nota_50 = BTNEsquerda
+            nota_2 = BTNDireita
+        else:
+            nota_50 = BTNDireita
+            nota_2 = BTNEsquerda
+        nota_50.configure(command=acertou)
+        nota_2.configure(command=errou)
     
     # Cria um temporizador
     tempo_restante = 5
