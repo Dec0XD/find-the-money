@@ -36,6 +36,13 @@ CTkLabel(master=app, text="Insira o percentual de vezes que a nota de R$ 100 dev
 QuantidadeNotaEsquerda = CTkEntry(app, placeholder_text="Apenas Números!")
 QuantidadeNotaEsquerda.pack(padx=20, pady=20)
 
+CTkLabel(master=app, text="Insira o número de rodadas.", text_color="#fff",
+        justify="center", font=("Arial Bold", 16)).pack(anchor="center", pady=(0, 5),padx=(25, 0))
+NumeroRodadas = CTkEntry(app, placeholder_text="Apenas Números!")
+NumeroRodadas.pack(padx=20, pady=20)
+
+CTkLabel(master=app, text="Aperte o botão para iniciar o jogo!", text_color="#fff",
+        justify="center", font=("Arial Bold", 16)).pack(anchor="center", pady=(0, 5),padx=(25, 0))  
 inciarJogo = CTkButton(master=app, text="inicar Jogo!", text_color="#fff", command=IniciarJogo).pack(anchor="center")
 
 
