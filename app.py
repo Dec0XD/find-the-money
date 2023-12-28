@@ -1,8 +1,8 @@
 from customtkinter import *
 from CTkMessagebox import CTkMessagebox
 from PIL import Image
+from tkinter import Toplevel, Label
 import random
-import time
 
 app = CTk()
 app.geometry("900x600")
@@ -37,15 +37,69 @@ CTkLabel(master=sidebar_frame, text="clique aqui").pack(pady=(2, 0), anchor="cen
 informationApp = CTkButton(master=sidebar_frame, text="informações", command=MostrarInformaçao).pack(pady=(10,0), anchor="center")
 informationJogo = CTkButton(master=sidebar_frame, text="Jogo", command=InfosJogo).pack(pady=(10,0), anchor="center")
 
-
-
-
 def IniciarJogo():
-    pass
-    #NotaEsquerda = QuantidadeNotaEsquerda.get()
-    #NRodadas = NumeroRodadas.get()
-    #print(NotaEsquerda)
-    #print(NRodadas)
+    # Cria uma nova janela
+    new_window = Toplevel(app)
+    new_window.geometry("900x600")
+    
+    # Carrega as imagens das notas
+    nota_100_img = Image.open("assets/100.jpg")
+    nota_2_img = Image.open("assets/2.jpg")
+    nota_100_ctk_img = CTkImage(dark_image=nota_100_img, light_image=nota_100_img, size=(100, 110))
+    nota_2_ctk_img = CTkImage(dark_image=nota_2_img, light_image=nota_2_img, size=(100, 110))
+    
+    # Cria botões na nova janela
+    BTNEsquerda = CTkButton(master=new_window, text="Botão da esquerda")
+    BTNEsquerda.pack(side="left", padx=100, pady=10)
+
+    BTNDireita = CTkButton(master=new_window, text="Botão da direita")
+    BTNDireita.pack(side="right", padx=100, pady=10)
+    
+    # Define qual botão terá a nota de 100 reais
+    nota_100 = random.choice([BTNEsquerda, BTNDireita])
+    nota_2 = BTNDireita if nota_100 == BTNEsquerda else BTNEsquerda
+    
+    # Define o que acontece quando os botões são pressionados
+    def acertou():
+        nota_100.configure(image=nota_100_ctk_img)
+        new_window.after(2000, reset_timer)
+        
+    def errou():
+        nota_2.configure(image=nota_2_ctk_img)
+        new_window.after(2000, reset_timer)
+    
+    nota_100.configure(command=acertou)
+    nota_2.configure(command=errou)
+    
+    # Cria um temporizador
+    tempo_restante = 5
+    timer_label = Label(new_window, text=f"Tempo restante: {tempo_restante} segundos")
+    timer_label.pack()
+    
+    # Variável de controle para pausar o temporizador
+    pausar_temporizador = False
+    
+    def countdown():
+        nonlocal tempo_restante
+        if tempo_restante > 0 and not pausar_temporizador:
+            tempo_restante -= 1
+            timer_label.config(text=f"Tempo restante: {tempo_restante} segundos")
+            new_window.after(1000, countdown)
+        elif tempo_restante <= 0:
+            timer_label.config(text="O tempo acabou!")
+            new_window.destroy()
+    
+    def reset_timer():
+        nonlocal tempo_restante, pausar_temporizador
+        tempo_restante = 5
+        pausar_temporizador = False
+        countdown()
+    
+    # Inicia o temporizador
+    countdown()
+
+
+
     
 CTkLabel(master=app, text="Configuração", text_color="#fff",
         justify="center", font=("Arial Bold", 24)).pack(anchor="center", pady=(0, 5),padx=(25, 0))
@@ -64,28 +118,5 @@ CTkLabel(master=app, text="Aperte o botão para iniciar o jogo!", text_color="#f
         justify="center", font=("Arial Bold", 16)).pack(anchor="center", pady=(0, 5),padx=(25, 0))  
 inciarJogo = CTkButton(master=app, text="inicar Jogo!", text_color="#fff", command=IniciarJogo).pack(anchor="center")
 
-#jogo
-# Botão da esquerda
-BTNEsquerda = CTkButton(master=app, text="Botão da esquerda")
-BTNEsquerda.pack(side="left", padx=100, pady=10)
-
-# Botão da direita
-BTNDireita = CTkButton(master=app, text="Botão da direita")
-BTNDireita.pack(side="right", padx=100, pady=10)
-
-def progreso(i):
-    if i <= 100:
-        progressbar.set(i)
-        print(i)
-        i += 1
-        app.after(50, lambda: progreso(i))  # Chama a função novamente após 50 milissegundos
-    else:
-        print("Concluído!")
-
-progressbar = CTkProgressBar(master=app, width=160, height=20, border_width=2)
-progressbar.place(x=470, y=500)
-
-# Inicia o processo de progresso
-progreso(0)
 
 app.mainloop()
