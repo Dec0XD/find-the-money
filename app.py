@@ -43,14 +43,14 @@ def IniciarJogo():
     new_window.geometry("900x600")
     
     # Carrega as imagens das notas
-    nota_100_img = Image.open("assets/100.jpg")
+    nota_50_img = Image.open("assets/50.jpg")
     nota_2_img = Image.open("assets/2.jpg")
     
     # Redimensiona as imagens para caber no canvas
-    nota_100_img = nota_100_img.resize((410, 110))
+    nota_50_img = nota_50_img.resize((410, 110))
     nota_2_img = nota_2_img.resize((410, 110))
     
-    nota_100_photo = ImageTk.PhotoImage(nota_100_img)
+    nota_50_photo = ImageTk.PhotoImage(nota_50_img)
     nota_2_photo = ImageTk.PhotoImage(nota_2_img)
     
     # Cria um canvas para exibir a imagem
@@ -64,13 +64,13 @@ def IniciarJogo():
     BTNDireita = CTkButton(master=new_window, text="Botão da direita")
     BTNDireita.pack(side="right", padx=100, pady=10)
     
-    # Define qual botão terá a nota de 100 reais
-    nota_100 = random.choice([BTNEsquerda, BTNDireita])
-    nota_2 = BTNDireita if nota_100 == BTNEsquerda else BTNEsquerda
+    # Define qual botão terá a nota de 50 reais
+    nota_50 = random.choice([BTNEsquerda, BTNDireita])
+    nota_2 = BTNDireita if nota_50 == BTNEsquerda else BTNEsquerda
     
     # Define o que acontece quando os botões são pressionados
     def acertou():
-        canvas.create_image(205, 55, image=nota_100_photo)
+        canvas.create_image(205, 55, image=nota_50_photo)
         stop_timer()
         new_window.after(2000, lambda: canvas.delete("all"))
         new_window.after(2000, start_timer)
@@ -81,7 +81,7 @@ def IniciarJogo():
         new_window.after(2000, lambda: canvas.delete("all"))
         new_window.after(2000, start_timer)
     
-    nota_100.configure(command=acertou)
+    nota_50.configure(command=acertou)
     nota_2.configure(command=errou)
     
     # Cria um temporizador
@@ -114,13 +114,10 @@ def IniciarJogo():
     # Inicia o temporizador
     start_timer()
 
-
-
-    
 CTkLabel(master=app, text="Configuração", text_color="#fff",
         justify="center", font=("Arial Bold", 24)).pack(anchor="center", pady=(0, 5),padx=(25, 0))
 
-CTkLabel(master=app, text="Insira o percentual de vezes que a nota de R$ 100 deverá aparecer do lado esquerdo.", text_color="#fff",
+CTkLabel(master=app, text="Insira o percentual de vezes que a nota de R$ 50 deverá aparecer do lado esquerdo.", text_color="#fff",
         justify="center", font=("Arial Bold", 16)).pack(anchor="center", pady=(0, 5),padx=(25, 0))
 QuantidadeNotaEsquerda = CTkEntry(app, placeholder_text="Apenas Números!")
 QuantidadeNotaEsquerda.pack(padx=20, pady=20)
@@ -133,6 +130,5 @@ NumeroRodadas.pack(padx=20, pady=20)
 CTkLabel(master=app, text="Aperte o botão para iniciar o jogo!", text_color="#fff",
         justify="center", font=("Arial Bold", 16)).pack(anchor="center", pady=(0, 5),padx=(25, 0))  
 inciarJogo = CTkButton(master=app, text="inicar Jogo!", text_color="#fff", command=IniciarJogo).pack(anchor="center")
-
 
 app.mainloop()
