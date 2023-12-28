@@ -1,7 +1,7 @@
 from customtkinter import *
 from CTkMessagebox import CTkMessagebox
-from PIL import Image
-from tkinter import Toplevel, Label
+from PIL import Image, ImageTk
+from tkinter import Toplevel, Label, Canvas
 import random
 
 app = CTk()
@@ -37,10 +37,6 @@ CTkLabel(master=sidebar_frame, text="clique aqui").pack(pady=(2, 0), anchor="cen
 informationApp = CTkButton(master=sidebar_frame, text="informações", command=MostrarInformaçao).pack(pady=(10,0), anchor="center")
 informationJogo = CTkButton(master=sidebar_frame, text="Jogo", command=InfosJogo).pack(pady=(10,0), anchor="center")
 
-from tkinter import Toplevel, Label
-from PIL import Image
-import random
-
 def IniciarJogo():
     # Cria uma nova janela
     new_window = Toplevel(app)
@@ -49,8 +45,17 @@ def IniciarJogo():
     # Carrega as imagens das notas
     nota_100_img = Image.open("assets/100.jpg")
     nota_2_img = Image.open("assets/2.jpg")
-    nota_100_ctk_img = CTkImage(dark_image=nota_100_img, light_image=nota_100_img, size=(100, 110))
-    nota_2_ctk_img = CTkImage(dark_image=nota_2_img, light_image=nota_2_img, size=(100, 110))
+    
+    # Redimensiona as imagens para caber no canvas
+    nota_100_img = nota_100_img.resize((410, 110))
+    nota_2_img = nota_2_img.resize((410, 110))
+    
+    nota_100_photo = ImageTk.PhotoImage(nota_100_img)
+    nota_2_photo = ImageTk.PhotoImage(nota_2_img)
+    
+    # Cria um canvas para exibir a imagem
+    canvas = Canvas(new_window, width=410, height=110)
+    canvas.pack()
     
     # Cria botões na nova janela
     BTNEsquerda = CTkButton(master=new_window, text="Botão da esquerda")
@@ -65,14 +70,16 @@ def IniciarJogo():
     
     # Define o que acontece quando os botões são pressionados
     def acertou():
-        nota_100.configure(image=nota_100_ctk_img)
+        canvas.create_image(205, 55, image=nota_100_photo)
         stop_timer()
-        new_window.after(2000, reset_timer)
+        new_window.after(2000, lambda: canvas.delete("all"))
+        new_window.after(2000, start_timer)
         
     def errou():
-        nota_2.configure(image=nota_2_ctk_img)
+        canvas.create_image(205, 55, image=nota_2_photo)
         stop_timer()
-        new_window.after(2000, reset_timer)
+        new_window.after(2000, lambda: canvas.delete("all"))
+        new_window.after(2000, start_timer)
     
     nota_100.configure(command=acertou)
     nota_2.configure(command=errou)
@@ -103,11 +110,6 @@ def IniciarJogo():
     def stop_timer():
         nonlocal pausar_temporizador
         pausar_temporizador = True
-    
-    def reset_timer():
-        nonlocal tempo_restante
-        tempo_restante = 5
-        start_timer()
     
     # Inicia o temporizador
     start_timer()
