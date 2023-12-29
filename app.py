@@ -85,7 +85,7 @@ def IniciarJogo():
     
     if rodadas == total_rodadas:
         new_window.destroy()
-    
+
     def acertou():
         tempo_inicio = time.time()
         if not rodadas:  # Se todas as rodadas foram concluídas
@@ -185,13 +185,16 @@ def iniciarSegundoJogo():
     new_window.geometry("900x300")
     
     # Carrega as imagens das notas
+    nota_100_img = Image.open("assets/100.jpg")
     nota_50_img = Image.open("assets/50.jpg")
     nota_2_img = Image.open("assets/2.jpg")
     
     # Redimensiona as imagens para caber no canvas
+    nota_100_img = nota_100_img.resize((410, 110))
     nota_50_img = nota_50_img.resize((410, 110))
     nota_2_img = nota_2_img.resize((410, 110))
     
+    nota_100_photo = ImageTk.PhotoImage(nota_100_img)
     nota_50_photo = ImageTk.PhotoImage(nota_50_img)
     nota_2_photo = ImageTk.PhotoImage(nota_2_img)
     
@@ -224,13 +227,23 @@ def iniciarSegundoJogo():
     if rodadas == total_rodadas:
         new_window.destroy()
     
+    tempos_resposta = []
     def acertou():
+        tempo_inicio = time.time()
         if not rodadas:  # Se todas as rodadas foram concluídas
             stop_timer()
             timer_label.config(text="Fim do jogo!")
             inciarJogoDois.configure(state=NORMAL)
             return
-        canvas.create_image(205, 55, image=nota_50_photo)
+        tempo_fim = time.time()
+        tempo_decorrido = (tempo_fim - tempo_inicio)
+        tempos_resposta.append(tempo_decorrido)
+        media_tempos = sum(tempos_resposta) / len(tempos_resposta)
+        if tempo_decorrido < media_tempos:
+            imagem_nota = nota_100_photo
+        else:
+            imagem_nota = nota_50_photo
+        canvas.create_image(205, 55, image=imagem_nota)
         stop_timer()
         new_window.after(2000, lambda: canvas.delete("all"))
         new_window.after(2000, start_timer)
@@ -243,8 +256,10 @@ def iniciarSegundoJogo():
             nota_2 = BTNEsquerda
         nota_50.configure(command=acertou)
         nota_2.configure(command=errou)
+        print(f"Tempo decorrido: {tempo_decorrido} milissegundos")
 
     def errou():
+        tempo_inicio = time.time()
         if not rodadas:  # Se todas as rodadas foram concluídas
             stop_timer()
             timer_label.config(text="Fim do jogo!")
@@ -263,6 +278,9 @@ def iniciarSegundoJogo():
             nota_2 = BTNEsquerda
         nota_50.configure(command=acertou)
         nota_2.configure(command=errou)
+        tempo_fim = time.time()
+        tempo_decorrido = (tempo_fim - tempo_inicio)
+        print(f"Tempo decorrido: {tempo_decorrido} milissegundos")
 
     for rodada in rodadas:
         if rodada == "esquerda":
@@ -305,6 +323,18 @@ def iniciarSegundoJogo():
     
     # Inicia o temporizador
     start_timer()
+    
+def ResultadosJogoUm():
+    tela_resultado = Toplevel(app)
+    tela_resultado.geometry("200x300")
+    
+    CTkLabel(master=tela_resultado, text="Pontos:", text_color="#000").pack(pady=(10, 0), anchor="center")
+    CTkLabel(master=tela_resultado, text="Acertos:", text_color="#000").pack(pady=(10, 0), anchor="center")
+    CTkLabel(master=tela_resultado, text="Total Esquerdas:", text_color="#000").pack(pady=(10, 0), anchor="center")
+    CTkLabel(master=tela_resultado, text="Duração: milisegundos", text_color="#000").pack(pady=(10, 0), anchor="center")
+
+def ResultadosJogoDois():
+    pass
 
 CTkLabel(master=app, text="Primeira fase!", text_color="#fff",
         justify="center", font=("Arial Bold", 24)).pack(anchor="center", pady=(10, 5),padx=(25, 0))
@@ -341,5 +371,11 @@ CTkLabel(master=app, text="Aperte o botão para iniciar o jogo!", text_color="#f
         justify="center", font=("Arial Bold", 16)).pack(anchor="center", pady=(5, 5),padx=(25, 0))  
 inciarJogoDois = CTkButton(master=app, text="iniciar Jogo!", text_color="#fff", command=iniciarSegundoJogo, state=DISABLED)
 inciarJogoDois.pack(anchor="center", pady=(0, 5),padx=(25, 0))
+
+
+CTkLabel(master=sidebar_frame, text="Ulitmos resultados:").pack(pady=(60,0), anchor="center")
+CTkButton(master=sidebar_frame, text="Jogo 1", command=ResultadosJogoUm).pack(pady=(10,0), anchor="center")
+CTkButton(master=sidebar_frame, text="Jogo 2", command=ResultadosJogoDois).pack(pady=(10,0), anchor="center")
+
 
 app.mainloop()
