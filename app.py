@@ -84,16 +84,25 @@ def IniciarJogo():
     if rodadas == total_rodadas:
         new_window.destroy()
     
-    global tempo_inicio
+    global tempo_inicio, pontos, acerto, Total_Esquerdas, duracao
+    pontos = 0
+    acerto = 0
+    Total_Esquerdas = 0
+    duracao = 0
     tempo_inicio = time.time()
     def acertou():
-        global tempo_inicio
+        global tempo_inicio, pontos, acerto, Total_Esquerdas, duracao
         tempo_fim = time.time()
         tempo_decorrido = (tempo_fim - tempo_inicio)
         tempo_inicio = time.time()
+        pontos += 50
+        acerto += 1
+        Total_Esquerdas += 1
+        duracao = tempo_inicio
+        print(f"Pontuação: {pontos}")
         if not rodadas:  # Se todas as rodadas foram concluídas
             stop_timer()
-            timer_label.config(text="Fim do jogo!")
+            timer_label.config(text=f"Fim do jogo!\n Pontos:{pontos}\n Acertos:{acerto}\n Total Esquerda:{Total_Esquerdas}\n")
             inciarJogoDois.configure(state=NORMAL)
             return
         canvas.create_image(205, 55, image=nota_50_photo)
@@ -115,13 +124,15 @@ def IniciarJogo():
         nota_2.configure(command=errou)
 
     def errou():
-        global tempo_inicio
+        global tempo_inicio, pontos, acerto, Total_Esquerdas, duracao
         tempo_fim = time.time()
         tempo_decorrido = (tempo_fim - tempo_inicio)
         tempo_inicio = time.time()
+        pontos += 2
+        print(f"Pontuação: {pontos}")
         if not rodadas:  # Se todas as rodadas foram concluídas
             stop_timer()
-            timer_label.config(text="Fim do jogo!")
+            timer_label.config(text=f"Fim do jogo!\n Pontos:{pontos}\n Acertos:{acerto}\n Total Esquerda:{Total_Esquerdas}\n")
             inciarJogoDois.configure(state=NORMAL)
             return
         canvas.create_image(205, 55, image=nota_2_photo)
@@ -239,7 +250,10 @@ def iniciarSegundoJogo():
     
     tempos_resposta = []
     def acertou():
-        global tempo_inicio
+        global tempo_inicio, pontos, acerto, Total_Esquerdas, duracao
+        acerto += 1
+        Total_Esquerdas += 1
+        duracao = tempo_inicio
         tempo_fim = time.time()
         tempo_decorrido = (tempo_fim - tempo_inicio)
         tempo_inicio = time.time()
@@ -251,12 +265,14 @@ def iniciarSegundoJogo():
         print(f"Média dos tempos: {media_tempos}")
         if tempo_decorrido < media_tempos:
             imagem_nota = nota_100_photo
+            pontos += 100
         else:
             imagem_nota = nota_50_photo
+            pontos += 50
         canvas.create_image(205, 55, image=imagem_nota)
         if not rodadas:  # Se todas as rodadas foram concluídas
             stop_timer()
-            timer_label.config(text="Fim do jogo!")
+            timer_label.config(text=f"Fim do jogo!\n Pontos:{pontos}\n Acertos:{acerto}\n Total Esquerda:{Total_Esquerdas}\n")
             new_window.after(10, lambda: BTNDireita.configure(state=DISABLED))
             new_window.after(2000, lambda: BTNDireita.configure(state=NORMAL))
             new_window.after(10, lambda: BTNEsquerda.configure(state=DISABLED))
@@ -278,7 +294,11 @@ def iniciarSegundoJogo():
         nota_2.configure(command=errou)
 
     def errou():
-        global tempo_inicio
+        global tempo_inicio, pontos, acerto, Total_Esquerdas, duracao
+        pontos += 2
+        acerto += 1
+        Total_Esquerdas += 1
+        duracao = tempo_inicio
         tempo_fim = time.time()
         tempo_decorrido = (tempo_fim - tempo_inicio)
         tempo_inicio = time.time()
@@ -290,7 +310,7 @@ def iniciarSegundoJogo():
         print(f"Média dos tempos: {media_tempos}")
         if not rodadas:  # Se todas as rodadas foram concluídas
             stop_timer()
-            timer_label.config(text="Fim do jogo!")
+            timer_label.config(text=f"Fim do jogo!\n Pontos:{pontos}\n Acertos:{acerto}\n Total Esquerda:{Total_Esquerdas}\n")
             new_window.after(10, lambda: BTNDireita.configure(state=DISABLED))
             new_window.after(2000, lambda: BTNDireita.configure(state=NORMAL))
             new_window.after(10, lambda: BTNEsquerda.configure(state=DISABLED))
