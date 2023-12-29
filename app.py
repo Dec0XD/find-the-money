@@ -90,7 +90,6 @@ def IniciarJogo():
         global tempo_inicio
         tempo_fim = time.time()
         tempo_decorrido = (tempo_fim - tempo_inicio)
-        print(f"Tempo decorrido: {tempo_decorrido} milissegundos")
         tempo_inicio = time.time()
         if not rodadas:  # Se todas as rodadas foram concluídas
             stop_timer()
@@ -119,7 +118,6 @@ def IniciarJogo():
         global tempo_inicio
         tempo_fim = time.time()
         tempo_decorrido = (tempo_fim - tempo_inicio)
-        print(f"Tempo decorrido: {tempo_decorrido} milissegundos")
         tempo_inicio = time.time()
         if not rodadas:  # Se todas as rodadas foram concluídas
             stop_timer()
@@ -239,15 +237,23 @@ def iniciarSegundoJogo():
     if rodadas == total_rodadas:
         new_window.destroy()
     
-    global tempo_inicio
-    tempo_inicio = time.time()
     tempos_resposta = []
     def acertou():
         global tempo_inicio
         tempo_fim = time.time()
         tempo_decorrido = (tempo_fim - tempo_inicio)
-        print(f"Tempo decorrido: {tempo_decorrido} milissegundos")
         tempo_inicio = time.time()
+        tempos_resposta.append(tempo_decorrido)
+        print('Acertou')
+        print(f"Tempos de resposta: {tempos_resposta}")  # Imprime a lista de tempos de resposta
+        media_tempos = sum(tempos_resposta) / len(tempos_resposta)
+        print(f"Tempo decorrido: {tempo_decorrido}")
+        print(f"Média dos tempos: {media_tempos}")
+        if tempo_decorrido < media_tempos:
+            imagem_nota = nota_100_photo
+        else:
+            imagem_nota = nota_50_photo
+        canvas.create_image(205, 55, image=imagem_nota)
         if not rodadas:  # Se todas as rodadas foram concluídas
             stop_timer()
             timer_label.config(text="Fim do jogo!")
@@ -257,12 +263,6 @@ def iniciarSegundoJogo():
             new_window.after(2000, lambda: BTNEsquerda.configure(state=NORMAL))
             inciarJogoDois.configure(state=NORMAL)
             return
-        tempos_resposta.append(tempo_decorrido)
-        media_tempos = sum(tempos_resposta) / len(tempos_resposta)
-        if tempo_decorrido < media_tempos:
-            imagem_nota = nota_100_photo
-        else:
-            imagem_nota = nota_50_photo
         canvas.create_image(205, 55, image=imagem_nota)
         stop_timer()
         new_window.after(2000, lambda: canvas.delete("all"))
@@ -281,8 +281,13 @@ def iniciarSegundoJogo():
         global tempo_inicio
         tempo_fim = time.time()
         tempo_decorrido = (tempo_fim - tempo_inicio)
-        print(f"Tempo decorrido: {tempo_decorrido} milissegundos")
         tempo_inicio = time.time()
+        tempos_resposta.append(tempo_decorrido)
+        print('errou')
+        print(f"Tempos de resposta: {tempos_resposta}")  # Imprime a lista de tempos de resposta
+        media_tempos = sum(tempos_resposta) / len(tempos_resposta)
+        print(f"Tempo decorrido: {tempo_decorrido}")
+        print(f"Média dos tempos: {media_tempos}")
         if not rodadas:  # Se todas as rodadas foram concluídas
             stop_timer()
             timer_label.config(text="Fim do jogo!")
