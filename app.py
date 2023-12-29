@@ -58,7 +58,7 @@ def IniciarJogo():
     canvas.pack()
     
     # Cria botões na nova janela
-    BTNEsquerda = CTkButton(master=new_window, text="Botão da esquerda")
+    BTNEsquerda = CTkButton(master=new_window, text="Botão da esquerda",)
     BTNEsquerda.pack(side="left", padx=100, pady=10)
     BTNDireita = CTkButton(master=new_window, text="Botão da direita")
     BTNDireita.pack(side="right", padx=100, pady=10)
@@ -66,8 +66,6 @@ def IniciarJogo():
     canvas_circulo.pack()
     canvas_circulo.create_oval(5, 5, 45, 45, fill="red")
 
-
-    
     # Define qual botão terá a nota de 50 reais
     if QuantidadeNotaEsquerda.get() == "":
         percentual_esquerda = 50/100
@@ -85,8 +83,14 @@ def IniciarJogo():
     
     if rodadas == total_rodadas:
         new_window.destroy()
-
+    
+    global tempo_inicio
+    tempo_inicio = time.time()
     def acertou():
+        global tempo_inicio
+        tempo_fim = time.time()
+        tempo_decorrido = (tempo_fim - tempo_inicio)
+        print(f"Tempo decorrido: {tempo_decorrido} milissegundos")
         tempo_inicio = time.time()
         if not rodadas:  # Se todas as rodadas foram concluídas
             stop_timer()
@@ -110,11 +114,12 @@ def IniciarJogo():
             nota_2 = BTNEsquerda
         nota_50.configure(command=acertou)
         nota_2.configure(command=errou)
+
+    def errou():
+        global tempo_inicio
         tempo_fim = time.time()
         tempo_decorrido = (tempo_fim - tempo_inicio)
         print(f"Tempo decorrido: {tempo_decorrido} milissegundos")
-
-    def errou():
         tempo_inicio = time.time()
         if not rodadas:  # Se todas as rodadas foram concluídas
             stop_timer()
@@ -138,9 +143,6 @@ def IniciarJogo():
             nota_2 = BTNEsquerda
         nota_50.configure(command=acertou)
         nota_2.configure(command=errou)
-        tempo_fim = time.time()
-        tempo_decorrido = (tempo_fim - tempo_inicio)
-        print(f"Tempo decorrido: {tempo_decorrido} milissegundos")
         
     for rodada in rodadas:
         if rodada == "esquerda":
@@ -191,7 +193,7 @@ def iniciarSegundoJogo():
     # Cria uma nova janela
     new_window = Toplevel(app)
     new_window.geometry("900x300")
-    
+      
     # Carrega as imagens das notas
     nota_100_img = Image.open("assets/100.jpg")
     nota_50_img = Image.open("assets/50.jpg")
@@ -237,8 +239,14 @@ def iniciarSegundoJogo():
     if rodadas == total_rodadas:
         new_window.destroy()
     
+    global tempo_inicio
+    tempo_inicio = time.time()
     tempos_resposta = []
     def acertou():
+        global tempo_inicio
+        tempo_fim = time.time()
+        tempo_decorrido = (tempo_fim - tempo_inicio)
+        print(f"Tempo decorrido: {tempo_decorrido} milissegundos")
         tempo_inicio = time.time()
         if not rodadas:  # Se todas as rodadas foram concluídas
             stop_timer()
@@ -249,8 +257,6 @@ def iniciarSegundoJogo():
             new_window.after(2000, lambda: BTNEsquerda.configure(state=NORMAL))
             inciarJogoDois.configure(state=NORMAL)
             return
-        tempo_fim = time.time()
-        tempo_decorrido = (tempo_fim - tempo_inicio)
         tempos_resposta.append(tempo_decorrido)
         media_tempos = sum(tempos_resposta) / len(tempos_resposta)
         if tempo_decorrido < media_tempos:
@@ -270,9 +276,12 @@ def iniciarSegundoJogo():
             nota_2 = BTNEsquerda
         nota_50.configure(command=acertou)
         nota_2.configure(command=errou)
-        print(f"Tempo decorrido: {tempo_decorrido} milissegundos")
 
     def errou():
+        global tempo_inicio
+        tempo_fim = time.time()
+        tempo_decorrido = (tempo_fim - tempo_inicio)
+        print(f"Tempo decorrido: {tempo_decorrido} milissegundos")
         tempo_inicio = time.time()
         if not rodadas:  # Se todas as rodadas foram concluídas
             stop_timer()
@@ -296,10 +305,7 @@ def iniciarSegundoJogo():
             nota_2 = BTNEsquerda
         nota_50.configure(command=acertou)
         nota_2.configure(command=errou)
-        tempo_fim = time.time()
-        tempo_decorrido = (tempo_fim - tempo_inicio)
-        print(f"Tempo decorrido: {tempo_decorrido} milissegundos")
-
+        
     for rodada in rodadas:
         if rodada == "esquerda":
             nota_50 = BTNEsquerda
