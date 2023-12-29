@@ -12,16 +12,15 @@ set_appearance_mode("dark")
 
 def MostrarInformaçao():
     CTkMessagebox(title="Informações sobre a aplicação", 
-                  message="Informações.")
-def InfosJogo():
-    CTkMessagebox(title="Informações sobre o jogo", 
-                message="""
+                  message="""
 Bem vindo! Vamos dar início ao jogo.\n
 Para jogar é bem simples:\n
 1. Escolha uma caixinha branca, ou da esquerda ou da direita, e tente encontrar a nota de 100 reais.
 2. No início de cada rodada posicione o mouse no círculo vermelho.
-3. Cuidado! Se demorar muito para escolher, voltará para o início do jogo."""
-                )
+3. Cuidado! Se demorar muito para escolher, voltará para o início do jogo.""")
+def InfosJogo():
+    CTkMessagebox(title="Informações sobre o jogo", 
+                message="Se você fizer um tempo menor do que o tempo médio em cada rodada, a nota que você achar terá valor dobrado!")
 
 sidebar_frame = CTkFrame(master=app, fg_color="#070F1F", width=200, height=800, corner_radius=0)
 sidebar_frame.pack_propagate(0)
@@ -34,8 +33,8 @@ CTkLabel(master=sidebar_frame, text="", image=logo_img).pack(pady=(38, 0), ancho
 CTkLabel(master=sidebar_frame, text="Para mais informações").pack(pady=(38, 0), anchor="center")
 CTkLabel(master=sidebar_frame, text="clique aqui").pack(pady=(2, 0), anchor="center")
 
-informationApp = CTkButton(master=sidebar_frame, text="informações", command=MostrarInformaçao).pack(pady=(10,0), anchor="center")
-informationJogo = CTkButton(master=sidebar_frame, text="Jogo", command=InfosJogo).pack(pady=(10,0), anchor="center")
+informationApp = CTkButton(master=sidebar_frame, text="Instruções 1", command=MostrarInformaçao).pack(pady=(10,0), anchor="center")
+informationJogo = CTkButton(master=sidebar_frame, text="Instruções 2", command=InfosJogo).pack(pady=(10,0), anchor="center")
 
 def IniciarJogo():
     # Cria uma nova janela
@@ -60,6 +59,10 @@ def IniciarJogo():
     # Cria botões na nova janela
     BTNEsquerda = CTkButton(master=new_window, text="Botão da esquerda")
     BTNEsquerda.pack(side="left", padx=100, pady=10)
+    # Cria um canvas para o círculo
+    canvas_circulo = Canvas(new_window, width=50, height=50, bg='blue')
+    canvas_circulo.pack(side='left')
+    canvas_circulo.create_oval(5, 5, 45, 45, fill="red")
 
     BTNDireita = CTkButton(master=new_window, text="Botão da direita")
     BTNDireita.pack(side="right", padx=100, pady=10)
@@ -121,9 +124,7 @@ def IniciarJogo():
             nota_2 = BTNEsquerda
         nota_50.configure(command=acertou)
         nota_2.configure(command=errou)
-
-
-    
+        
     for rodada in rodadas:
         if rodada == "esquerda":
             nota_50 = BTNEsquerda
@@ -251,8 +252,6 @@ def iniciarSegundoJogo():
         nota_50.configure(command=acertou)
         nota_2.configure(command=errou)
 
-
-    
     for rodada in rodadas:
         if rodada == "esquerda":
             nota_50 = BTNEsquerda
