@@ -3,6 +3,7 @@ from CTkMessagebox import CTkMessagebox
 from PIL import Image, ImageTk
 from tkinter import Toplevel, Label, Canvas
 import random
+import time
 
 app = CTk()
 app.geometry("900x600")
@@ -60,7 +61,7 @@ def IniciarJogo():
     BTNEsquerda = CTkButton(master=new_window, text="Botão da esquerda")
     BTNEsquerda.pack(side="left", padx=100, pady=10)
     # Cria um canvas para o círculo
-    canvas_circulo = Canvas(new_window, width=50, height=50, bg='blue')
+    canvas_circulo = Canvas(new_window, width=50, height=50)
     canvas_circulo.pack(side='left')
     canvas_circulo.create_oval(5, 5, 45, 45, fill="red")
 
@@ -86,6 +87,7 @@ def IniciarJogo():
         new_window.destroy()
     
     def acertou():
+        tempo_inicio = time.time()
         if not rodadas:  # Se todas as rodadas foram concluídas
             stop_timer()
             timer_label.config(text="Fim do jogo!")
@@ -104,8 +106,12 @@ def IniciarJogo():
             nota_2 = BTNEsquerda
         nota_50.configure(command=acertou)
         nota_2.configure(command=errou)
+        tempo_fim = time.time()
+        tempo_decorrido = (tempo_fim - tempo_inicio)
+        print(f"Tempo decorrido: {tempo_decorrido} milissegundos")
 
     def errou():
+        tempo_inicio = time.time()
         if not rodadas:  # Se todas as rodadas foram concluídas
             stop_timer()
             timer_label.config(text="Fim do jogo!")
@@ -124,6 +130,9 @@ def IniciarJogo():
             nota_2 = BTNEsquerda
         nota_50.configure(command=acertou)
         nota_2.configure(command=errou)
+        tempo_fim = time.time()
+        tempo_decorrido = (tempo_fim - tempo_inicio)
+        print(f"Tempo decorrido: {tempo_decorrido} milissegundos")
         
     for rodada in rodadas:
         if rodada == "esquerda":
@@ -154,11 +163,14 @@ def IniciarJogo():
             new_window.destroy()
     
     def start_timer():
+        if not rodadas:  # Se todas as rodadas foram concluídas
+            return
         nonlocal tempo_restante, pausar_temporizador
         tempo_restante = 6
         timer_label.config(text=f"Tempo restante: {tempo_restante} segundos")
         pausar_temporizador = False
         countdown()
+
     
     def stop_timer():
         nonlocal pausar_temporizador
