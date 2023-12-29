@@ -65,8 +65,17 @@ def IniciarJogo():
     BTNDireita.pack(side="right", padx=100, pady=10)
     
     # Define qual botão terá a nota de 50 reais
-    percentual_esquerda = int(QuantidadeNotaEsquerda.get()) / 100
-    total_rodadas = int(NumeroRodadas.get())
+    if QuantidadeNotaEsquerda.get() == "":
+        percentual_esquerda = 50/100
+    else:
+        percentual_esquerda = int(QuantidadeNotaEsquerda.get()) / 100
+    print(percentual_esquerda)
+
+    if NumeroRodadas.get() == "" or NumeroRodadas.get() == "0":
+        total_rodadas = 10
+    else:
+        total_rodadas = int(NumeroRodadas.get())
+
     rodadas_esquerda = round(total_rodadas * percentual_esquerda)
     rodadas = ["esquerda"] * rodadas_esquerda + ["direita"] * (total_rodadas - rodadas_esquerda)
     random.shuffle(rodadas)
@@ -79,12 +88,33 @@ def IniciarJogo():
         stop_timer()
         new_window.after(2000, lambda: canvas.delete("all"))
         new_window.after(2000, start_timer)
-        
+        if rodadas:
+            rodada = rodadas.pop(0)
+            if rodada == "esquerda":
+                nota_50 = BTNEsquerda
+                nota_2 = BTNDireita
+            else:
+                nota_50 = BTNDireita
+                nota_2 = BTNEsquerda
+            nota_50.configure(command=acertou)
+            nota_2.configure(command=errou)
+
     def errou():
         canvas.create_image(205, 55, image=nota_2_photo)
         stop_timer()
         new_window.after(2000, lambda: canvas.delete("all"))
         new_window.after(2000, start_timer)
+        if rodadas:
+            rodada = rodadas.pop(0)
+            if rodada == "esquerda":
+                nota_50 = BTNEsquerda
+                nota_2 = BTNDireita
+            else:
+                nota_50 = BTNDireita
+                nota_2 = BTNEsquerda
+            nota_50.configure(command=acertou)
+            nota_2.configure(command=errou)
+
     
     for rodada in rodadas:
         if rodada == "esquerda":
@@ -116,7 +146,7 @@ def IniciarJogo():
     
     def start_timer():
         nonlocal tempo_restante, pausar_temporizador
-        tempo_restante = 5
+        tempo_restante = 6
         timer_label.config(text=f"Tempo restante: {tempo_restante} segundos")
         pausar_temporizador = False
         countdown()
@@ -128,21 +158,26 @@ def IniciarJogo():
     # Inicia o temporizador
     start_timer()
 
-CTkLabel(master=app, text="Configuração", text_color="#fff",
-        justify="center", font=("Arial Bold", 24)).pack(anchor="center", pady=(0, 5),padx=(25, 0))
+CTkLabel(master=app, text="Primeira fase!", text_color="#fff",
+        justify="center", font=("Arial Bold", 24)).pack(anchor="center", pady=(10, 5),padx=(25, 0))
 
 CTkLabel(master=app, text="Insira o percentual de vezes que a nota de R$ 50 deverá aparecer do lado esquerdo.", text_color="#fff",
-        justify="center", font=("Arial Bold", 16)).pack(anchor="center", pady=(0, 5),padx=(25, 0))
+        justify="center", font=("Arial Bold", 16)).pack(anchor="center", pady=(10, 5),padx=(25, 0))
 QuantidadeNotaEsquerda = CTkEntry(app, placeholder_text="Apenas Números!")
-QuantidadeNotaEsquerda.pack(padx=20, pady=20)
+QuantidadeNotaEsquerda.pack(anchor="center", pady=(5, 5),padx=(25, 0))
 
 CTkLabel(master=app, text="Insira o número de rodadas.", text_color="#fff",
-        justify="center", font=("Arial Bold", 16)).pack(anchor="center", pady=(0, 5),padx=(25, 0))
+        justify="center", font=("Arial Bold", 16)).pack(anchor="center", pady=(5, 5),padx=(25, 0))
+
 NumeroRodadas = CTkEntry(app, placeholder_text="Apenas Números!")
-NumeroRodadas.pack(padx=20, pady=20)
+NumeroRodadas.pack(anchor="center", pady=(0, 5),padx=(25, 0))
 
 CTkLabel(master=app, text="Aperte o botão para iniciar o jogo!", text_color="#fff",
-        justify="center", font=("Arial Bold", 16)).pack(anchor="center", pady=(0, 5),padx=(25, 0))  
-inciarJogo = CTkButton(master=app, text="inicar Jogo!", text_color="#fff", command=IniciarJogo).pack(anchor="center")
+        justify="center", font=("Arial Bold", 16)).pack(anchor="center", pady=(5, 5),padx=(25, 0))  
+inciarJogo = CTkButton(master=app, text="inicar Jogo!", text_color="#fff", command=IniciarJogo).pack(anchor="center", pady=(0, 5),padx=(25, 0))
+
+CTkLabel(master=app, text="Segunda fase!", text_color="#fff",
+        justify="center", font=("Arial Bold", 24)).pack(anchor="center", pady=(40, 5),padx=(25, 0))  
+inciarJogo = CTkButton(master=app, text="inicar Jogo!", text_color="#fff", command=IniciarJogo, state=DISABLED).pack(anchor="center", pady=(0, 5),padx=(25, 0))
 
 app.mainloop()
