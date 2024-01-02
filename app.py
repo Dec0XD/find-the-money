@@ -258,6 +258,13 @@ def iniciarSegundoJogo():
         new_window.after(10, lambda: BTNDireita.configure(state=DISABLED))
         new_window.after(10, lambda: BTNEsquerda.configure(state=DISABLED))
         
+    global tempo_inicio, pontos, acerto, Total_Esquerdas, duracao
+    pontos = 0 
+    acerto = 0
+    Total_Esquerdas = 0 
+    duracao = 0
+    tempo_inicio = time.time()
+        
     tempos_resposta = []
     def acertou():
         global tempo_inicio, pontos, acerto, Total_Esquerdas, duracao
