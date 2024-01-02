@@ -6,7 +6,6 @@ import random
 import time
 import os
 
-
 app = CTk()
 app.geometry("900x600")
 app.resizable(0, 0)
@@ -42,6 +41,9 @@ CTkLabel(master=sidebar_frame, text="Para mais informações").pack(pady=(38, 0)
 
 informationApp = CTkButton(master=sidebar_frame, text="Instruções 1", command=MostrarInformaçao).pack(pady=(10,0), anchor="center")
 informationJogo = CTkButton(master=sidebar_frame, text="Instruções 2", command=InfosJogo).pack(pady=(10,0), anchor="center")
+
+#scrollable_content_frame = CTkScrollableFrame(master=app, fg_color="#CEC9DF")
+#scrollable_content_frame.pack(expand=True, fill="both", padx=20, pady=20)
 
 def IniciarJogo():
     new_window = Toplevel(app)
