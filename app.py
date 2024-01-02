@@ -100,11 +100,6 @@ def IniciarJogo():
         tempo_fim = time.time()
         tempo_decorrido = (tempo_fim - tempo_inicio)
         tempo_inicio = time.time()
-        pontos += 50
-        acerto += 1
-        Total_Esquerdas += 1
-        duracao = tempo_inicio
-        print(f"Pontuação: {pontos}")
         if not rodadas:  # Se todas as rodadas foram concluídas
             stop_timer()
             timer_label.config(text=f"Fim do jogo!\n Pontos:{pontos}\n Acertos:{acerto}\n Total Esquerda:{Total_Esquerdas}\n")
@@ -112,7 +107,12 @@ def IniciarJogo():
             FimDeJogo()
             return
         canvas.create_image(205, 55, image=nota_50_photo)
-        stop_timer()
+        stop_timer()        
+        pontos += 50
+        acerto += 1
+        Total_Esquerdas += 1
+        duracao = tempo_inicio
+        print(f"Pontuação: {pontos}")
         new_window.after(2000, lambda: canvas.delete("all"))
         new_window.after(10, lambda: BTNDireita.configure(state=DISABLED))
         new_window.after(2000, lambda: BTNDireita.configure(state=NORMAL))
@@ -134,8 +134,6 @@ def IniciarJogo():
         tempo_fim = time.time()
         tempo_decorrido = (tempo_fim - tempo_inicio)
         tempo_inicio = time.time()
-        pontos += 2
-        print(f"Pontuação: {pontos}")
         if not rodadas:  # Se todas as rodadas foram concluídas
             stop_timer()
             timer_label.config(text=f"Fim do jogo!\n Pontos:{pontos}\n Acertos:{acerto}\n Total Esquerda:{Total_Esquerdas}\n")
@@ -144,6 +142,8 @@ def IniciarJogo():
             return
         canvas.create_image(205, 55, image=nota_2_photo)
         stop_timer()
+        pontos += 2
+        print(f"Pontuação: {pontos}")
         new_window.after(2000, lambda: canvas.delete("all"))
         new_window.after(10, lambda: BTNDireita.configure(state=DISABLED))
         new_window.after(2000, lambda: BTNDireita.configure(state=NORMAL))
@@ -268,8 +268,6 @@ def iniciarSegundoJogo():
     tempos_resposta = []
     def acertou():
         global tempo_inicio, pontos, acerto, Total_Esquerdas, duracao
-        acerto += 1
-        Total_Esquerdas += 1
         duracao = tempo_inicio
         tempo_fim = time.time()
         tempo_decorrido = (tempo_fim - tempo_inicio)
@@ -295,6 +293,8 @@ def iniciarSegundoJogo():
             return
         canvas.create_image(205, 55, image=imagem_nota)
         stop_timer()
+        acerto += 1
+        Total_Esquerdas += 1
         new_window.after(2000, lambda: canvas.delete("all"))
         new_window.after(2000, start_timer)
         new_window.after(10, lambda: BTNDireita.configure(state=DISABLED))
@@ -312,10 +312,7 @@ def iniciarSegundoJogo():
         nota_2.configure(command=errou)
 
     def errou():
-        global tempo_inicio, pontos, acerto, Total_Esquerdas, duracao
-        pontos += 2
-        acerto += 1
-        Total_Esquerdas += 1
+        global tempo_inicio, pontos, acerto, duracao
         duracao = tempo_inicio
         tempo_fim = time.time()
         tempo_decorrido = (tempo_fim - tempo_inicio)
@@ -334,6 +331,7 @@ def iniciarSegundoJogo():
             return
         canvas.create_image(205, 55, image=nota_2_photo)
         stop_timer()
+        pontos += 2
         new_window.after(2000, lambda: canvas.delete("all"))
         new_window.after(2000, start_timer)
         new_window.after(10, lambda: BTNDireita.configure(state=DISABLED))
