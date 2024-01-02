@@ -4,7 +4,7 @@
 
 ### 1.1 Configuração Inicial da Interface
 
-```
+```python
 from customtkinter import *
 from CTkMessagebox import CTkMessagebox
 from PIL import Image, ImageTk
@@ -18,7 +18,7 @@ Esta seção importa as bibliotecas necessárias para a interface gráfica, mani
 
 ### 1.2 Configuração da Janela Principal
 
-```
+```python
 app = CTk()
 app.geometry("900x600")
 app.resizable(0, 0)
@@ -29,7 +29,7 @@ Cria uma instância da classe `CTk`, configura as dimensões da janela principal
 
 ### 1.3 Funções de Informações
 
-```
+```python
 def MostrarInformaçao():
     CTkMessagebox(title="Informações sobre a aplicação", 
                   message="""
@@ -44,7 +44,7 @@ A função `MostrarInformaçao()` exibe uma caixa de mensagem com informações 
 
 ### 1.4 Frame Lateral e Logotipo
 
-```
+```python
 sidebar_frame = CTkFrame(master=app, fg_color="#070F1F", width=200, height=800, corner_radius=0)
 sidebar_frame.pack_propagate(0)
 sidebar_frame.pack(fill="y", anchor="w", side="left")
@@ -62,7 +62,7 @@ Esta parte configura um frame lateral com um logotipo. `sidebar_frame` é uma es
 
 ### 1.5 Botões de Informações
 
-```
+```python
 informationApp = CTkButton(master=sidebar_frame, text="Instruções 1", command=MostrarInformaçao).pack(pady=(10,0), anchor="center")
 ```
 
@@ -72,7 +72,7 @@ Cria um botão na lateral chamado "Instruções 1", que, quando clicado, chama a
 
 ### 2.1 Função IniciarJogo()
 
-```
+```python
 def IniciarJogo():
     new_window = Toplevel(app)
     new_window.geometry("900x300")
@@ -85,7 +85,7 @@ A função `IniciarJogo()` configura a janela da Fase 1 do jogo, carrega imagens
 
 ### 2.2 Funcionalidades do Jogo
 
-```
+```python
 def acertou():
     # Código de resposta quando o usuário acerta
     # ...
@@ -98,7 +98,7 @@ Funções que são chamadas quando o usuário acerta ou erra. Atualizam a pontua
 
 ### 2.3 Configuração do Temporizador
 
-```
+```python
 def countdown():
     # Função de temporizador que atualiza o rótulo de contagem regressiva
     # ...
