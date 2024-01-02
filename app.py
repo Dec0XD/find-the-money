@@ -44,22 +44,18 @@ informationApp = CTkButton(master=sidebar_frame, text="Instruções 1", command=
 informationJogo = CTkButton(master=sidebar_frame, text="Instruções 2", command=InfosJogo).pack(pady=(10,0), anchor="center")
 
 def IniciarJogo():
-    # Cria uma nova janela
     new_window = Toplevel(app)
     new_window.geometry("900x300")
     
-    # Carrega as imagens das notas
-    nota_50_img = Image.open("assets/50.jpg")
-    nota_2_img = Image.open("assets/2.jpg")
-    
-    # Redimensiona as imagens para caber no canvas
+    nota_50_img = Image.open(os.path.join("assets", "50.jpg"))
+    nota_2_img = Image.open(os.path.join("assets", "2.jpg"))
+        
     nota_50_img = nota_50_img.resize((410, 110))
     nota_2_img = nota_2_img.resize((410, 110))
-    
+        
     nota_50_photo = ImageTk.PhotoImage(nota_50_img)
     nota_2_photo = ImageTk.PhotoImage(nota_2_img)
-    
-    # Cria um canvas para exibir a imagem
+
     canvas = Canvas(new_window, width=410, height=110)
     canvas.pack()
     
@@ -210,20 +206,17 @@ def IniciarJogo():
     start_timer()
 
 def iniciarSegundoJogo():
-    # Cria uma nova janela
     new_window = Toplevel(app)
     new_window.geometry("900x300")
       
-    # Carrega as imagens das notas
-    nota_100_img = Image.open("assets/100.jpg")
-    nota_50_img = Image.open("assets/50.jpg")
-    nota_2_img = Image.open("assets/2.jpg")
-    
-    # Redimensiona as imagens para caber no canvas
+    nota_100_img = Image.open(os.path.join("assets", "100.jpg"))
+    nota_50_img = Image.open(os.path.join("assets", "50.jpg"))
+    nota_2_img = Image.open(os.path.join("assets", "2.jpg"))
+        
     nota_100_img = nota_100_img.resize((410, 110))
     nota_50_img = nota_50_img.resize((410, 110))
     nota_2_img = nota_2_img.resize((410, 110))
-    
+        
     nota_100_photo = ImageTk.PhotoImage(nota_100_img)
     nota_50_photo = ImageTk.PhotoImage(nota_50_img)
     nota_2_photo = ImageTk.PhotoImage(nota_2_img)
