@@ -49,7 +49,7 @@ O código está dividido em três partes principais:
    pip install customtkinter Pillow
    ```
 
-2. Execute o script `seu_script.py`.
+2. Execute o script `app.py`.
 
 ## Observações
 

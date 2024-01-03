@@ -392,15 +392,16 @@ def iniciarSegundoJogo():
     # Inicia o temporizador
     start_timer()
 
+def validate_input(event):
+    # Verifica se o valor inserido é um dígito ou a tecla backspace
+    if not event.char.isdigit() and event.keysym != "BackSpace":
+        return "break"  # Ignora o evento se não for um dígito ou backspace
+    
 CTkLabel(master=app, text="Primeira fase!", text_color="#fff",
         justify="center", font=("Arial Bold", 24)).pack(anchor="center", pady=(10, 5),padx=(25, 0))
 
 CTkLabel(master=app, text="Insira o percentual (%) de vezes que a nota de R$ 50 deverá aparecer do lado esquerdo.", text_color="#fff",
         justify="center", font=("Arial Bold", 16)).pack(anchor="center", pady=(10, 5),padx=(25, 0))
-def validate_input(event):
-    # Verifica se o valor inserido é um dígito ou a tecla backspace
-    if not event.char.isdigit() and event.keysym != "BackSpace":
-        return "break"  # Ignora o evento se não for um dígito ou backspace
 
 QuantidadeNotaEsquerda = CTkEntry(app, placeholder_text="Apenas Números!")
 QuantidadeNotaEsquerda.pack(anchor="center", pady=(5, 5),padx=(25, 0))
@@ -415,7 +416,8 @@ NumeroRodadas.bind("<Key>", validate_input)
 
 CTkLabel(master=app, text="Aperte o botão para iniciar o jogo!", text_color="#fff",
         justify="center", font=("Arial Bold", 16)).pack(anchor="center", pady=(5, 5),padx=(25, 0))  
-inciarJogoUm = CTkButton(master=app, text="iniciar Jogo!", text_color="#fff", command=IniciarJogo).pack(anchor="center", pady=(0, 5),padx=(25, 0))
+inciarJogoUm = CTkButton(master=app, text="iniciar Jogo!", text_color="#fff", command=IniciarJogo)
+inciarJogoUm.pack(anchor="center", pady=(0, 5), padx=(25, 0))
 
 CTkLabel(master=app, text="Segunda fase!", text_color="#fff",
         justify="center", font=("Arial Bold", 24)).pack(anchor="center", pady=(40, 5),padx=(25, 0))  
