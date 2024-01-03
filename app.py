@@ -270,16 +270,22 @@ def iniciarSegundoJogo():
     tempos_resposta = []
     def acertou():
         global tempo_inicio, pontos, acerto, Total_Esquerdas, duracao
+        if not rodadas:  # Se todas as rodadas foram concluídas
+            stop_timer()
+            timer_label.config(text=f"Fim do jogo!\n Pontos:{pontos}\n Acertos:{acerto}\n Total Esquerda:{Total_Esquerdas}\n")
+            inciarJogoDois.configure(state=NORMAL)
+            FimDeJogo()
+            return
         duracao = tempo_inicio
         tempo_fim = time.time()
         tempo_decorrido = (tempo_fim - tempo_inicio)
         tempo_inicio = time.time()
         tempos_resposta.append(tempo_decorrido)
-        print('Acertou')
-        print(f"Tempos de resposta: {tempos_resposta}")  # Imprime a lista de tempos de resposta
+        #print('Acertou')
+        #print(f"Tempos de resposta: {tempos_resposta}")  # Imprime a lista de tempos de resposta
         media_tempos = sum(tempos_resposta) / len(tempos_resposta)
-        print(f"Tempo decorrido: {tempo_decorrido}")
-        print(f"Média dos tempos: {media_tempos}")
+        #print(f"Tempo decorrido: {tempo_decorrido}")
+        #print(f"Média dos tempos: {media_tempos}")
         if tempo_decorrido < media_tempos:
             imagem_nota = nota_100_photo
             pontos += 100
@@ -287,12 +293,7 @@ def iniciarSegundoJogo():
             imagem_nota = nota_50_photo
             pontos += 50
         canvas.create_image(205, 55, image=imagem_nota)
-        if not rodadas:  # Se todas as rodadas foram concluídas
-            stop_timer()
-            timer_label.config(text=f"Fim do jogo!\n Pontos:{pontos}\n Acertos:{acerto}\n Total Esquerda:{Total_Esquerdas}\n")
-            inciarJogoDois.configure(state=NORMAL)
-            FimDeJogo()
-            return
+
         canvas.create_image(205, 55, image=imagem_nota)
         stop_timer()
         acerto += 1
@@ -315,22 +316,22 @@ def iniciarSegundoJogo():
 
     def errou():
         global tempo_inicio, pontos, acerto, duracao
-        duracao = tempo_inicio
-        tempo_fim = time.time()
-        tempo_decorrido = (tempo_fim - tempo_inicio)
-        tempo_inicio = time.time()
-        tempos_resposta.append(tempo_decorrido)
-        print('errou')
-        print(f"Tempos de resposta: {tempos_resposta}")  # Imprime a lista de tempos de resposta
-        media_tempos = sum(tempos_resposta) / len(tempos_resposta)
-        print(f"Tempo decorrido: {tempo_decorrido}")
-        print(f"Média dos tempos: {media_tempos}")
         if not rodadas:  # Se todas as rodadas foram concluídas
             stop_timer()
             timer_label.config(text=f"Fim do jogo!\n Pontos:{pontos}\n Acertos:{acerto}\n Total Esquerda:{Total_Esquerdas}\n")
             inciarJogoDois.configure(state=NORMAL)
             FimDeJogo()
             return
+        duracao = tempo_inicio
+        tempo_fim = time.time()
+        tempo_decorrido = (tempo_fim - tempo_inicio)
+        tempo_inicio = time.time()
+        tempos_resposta.append(tempo_decorrido)
+        #print('errou')
+        #print(f"Tempos de resposta: {tempos_resposta}")  # Imprime a lista de tempos de resposta
+        media_tempos = sum(tempos_resposta) / len(tempos_resposta)
+        #print(f"Tempo decorrido: {tempo_decorrido}")
+        #print(f"Média dos tempos: {media_tempos}")
         canvas.create_image(205, 55, image=nota_2_photo)
         stop_timer()
         pontos += 2
@@ -423,6 +424,7 @@ CTkLabel(master=app, text="Segunda fase!", text_color="#fff",
         justify="center", font=("Arial Bold", 24)).pack(anchor="center", pady=(40, 5),padx=(25, 0))  
 CTkLabel(master=app, text="Insira o percentual (%) de vezes que a nota de R$ 50 deverá aparecer do lado esquerdo.", text_color="#fff",
         justify="center", font=("Arial Bold", 16)).pack(anchor="center", pady=(10, 5),padx=(25, 0))
+
 QuantidadeNotaEsquerdaJogoDois = CTkEntry(app, placeholder_text="Apenas Números!")
 QuantidadeNotaEsquerdaJogoDois.pack(anchor="center", pady=(5, 5),padx=(25, 0))
 QuantidadeNotaEsquerdaJogoDois.bind("<Key>", validate_input)
