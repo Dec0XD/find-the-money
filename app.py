@@ -17,12 +17,19 @@ def MostrarInformaçao():
                   message="""
 Bem vindo! Vamos dar início ao jogo.\n
 Para jogar é bem simples:\n
-1. Escolha uma caixinha branca, ou da esquerda ou da direita, e tente encontrar a nota de 100 reais.
+1. Escolha um dos botões, ou da esquerda ou da direita, e tente encontrar a nota de 50 reais.
 2. No início de cada rodada posicione o mouse no círculo vermelho.
 3. Cuidado! Se demorar muito para escolher, voltará para o início do jogo.""")
 def InfosJogo():
     CTkMessagebox(title="Informações sobre o jogo", 
                 message="Se você fizer um tempo menor do que o tempo médio em cada rodada, a nota que você achar terá valor dobrado!")
+def instruçoes3():
+    CTkMessagebox(title="Informações sobre o jogo", 
+                message="""O jogo tem um formato padrão:
+Nas duas fases a porcentagem das notas aparecerem do lado esquerdo é de 50%.
+Na primeira fase o número de rodadas é 10.
+Na segunda fase o número de rodadas é 40.
+Obs: Você pode alterar esses valores escrevendo em suas respectivas caixas.""")
 
 sidebar_frame = CTkFrame(master=app, fg_color="#070F1F", width=200, height=800, corner_radius=0)
 sidebar_frame.pack_propagate(0)
@@ -41,6 +48,7 @@ CTkLabel(master=sidebar_frame, text="Para mais informações").pack(pady=(38, 0)
 
 informationApp = CTkButton(master=sidebar_frame, text="Instruções 1", command=MostrarInformaçao).pack(pady=(10,0), anchor="center")
 informationJogo = CTkButton(master=sidebar_frame, text="Instruções 2", command=InfosJogo).pack(pady=(10,0), anchor="center")
+informationJogo = CTkButton(master=sidebar_frame, text="Instruções 3", command=instruçoes3).pack(pady=(10,0), anchor="center")
 
 #scrollable_content_frame = CTkScrollableFrame(master=app, fg_color="#CEC9DF")
 #scrollable_content_frame.pack(expand=True, fill="both", padx=20, pady=20)

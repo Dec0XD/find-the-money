@@ -44,14 +44,10 @@ O código está dividido em três partes principais:
 
 ## Como Executar
 
-1. Instale as dependências:
-   ```
-   pip install customtkinter Pillow
-   ```
-
-2. Execute o script `app.py`.
+1. Abra a pasta 'dist'.
+2. Depois a pasta 'app'.
+3. Em seguida Execute o script `app.py`.
 
 ## Observações
 
 - Certifique-se de ter as imagens das notas na pasta "assets" no mesmo diretório do script.
-- O código possui algumas funcionalidades que podem ser ajustadas conforme necessário.
