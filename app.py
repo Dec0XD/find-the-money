@@ -28,10 +28,10 @@ sidebar_frame = CTkFrame(master=app, fg_color="#070F1F", width=200, height=800, 
 sidebar_frame.pack_propagate(0)
 sidebar_frame.pack(fill="y", anchor="w", side="left")
 
-
-base_path = os.path.dirname(os.path.abspath(__file__))
-image_path = os.path.join(base_path, 'assets/GPDOC.png')
-logo_img_data = Image.open(image_path)
+#carregando a foto do GPDOC
+logo_path = os.path.dirname(os.path.abspath(__file__))
+image_logo_path = os.path.join(logo_path, 'assets/GPDOC.png')
+logo_img_data = Image.open(image_logo_path)
 
 logo_img = CTkImage(dark_image=logo_img_data, light_image=logo_img_data, size=(100, 110))
 
@@ -49,9 +49,14 @@ def IniciarJogo():
     new_window = Toplevel(app)
     new_window.geometry("900x300")
     
-    nota_50_img = Image.open(os.path.join("assets", "50.jpg"))
-    nota_2_img = Image.open(os.path.join("assets", "2.jpg"))
-        
+    #Carregando a nota de 50
+    nota_50_path = os.path.dirname(os.path.abspath(__file__))
+    image_50_path = os.path.join(nota_50_path, 'assets/50.jpg')
+    nota_50_img = Image.open(image_50_path)
+    #Carregando a nota de 2
+    nota_2_path = os.path.dirname(os.path.abspath(__file__))
+    image_2_path = os.path.join(nota_2_path, 'assets/2.jpg')
+    nota_2_img = Image.open(image_2_path)
     nota_50_img = nota_50_img.resize((410, 110))
     nota_2_img = nota_2_img.resize((410, 110))
         
@@ -210,10 +215,19 @@ def IniciarJogo():
 def iniciarSegundoJogo():
     new_window = Toplevel(app)
     new_window.geometry("900x300")
-      
-    nota_100_img = Image.open(os.path.join("assets", "100.jpg"))
-    nota_50_img = Image.open(os.path.join("assets", "50.jpg"))
-    nota_2_img = Image.open(os.path.join("assets", "2.jpg"))
+    
+    #Carregando a nota de 100
+    nota_100_path = os.path.dirname(os.path.abspath(__file__))
+    image_100_path = os.path.join(nota_100_path, 'assets/100.jpg')
+    nota_100_img = Image.open(image_100_path)
+    #Carregando a nota de 50
+    nota_50_path = os.path.dirname(os.path.abspath(__file__))
+    image_50_path = os.path.join(nota_50_path, 'assets/50.jpg')
+    nota_50_img = Image.open(image_50_path)
+    #Carregando a nota de 2
+    nota_2_path = os.path.dirname(os.path.abspath(__file__))
+    image_2_path = os.path.join(nota_2_path, 'assets/2.jpg')
+    nota_2_img = Image.open(image_2_path)
         
     nota_100_img = nota_100_img.resize((410, 110))
     nota_50_img = nota_50_img.resize((410, 110))
