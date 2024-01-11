@@ -1,7 +1,7 @@
 from customtkinter import *
 from CTkMessagebox import CTkMessagebox
 from PIL import Image, ImageTk
-from tkinter import Toplevel, Label, Canvas, ttk
+from tkinter import Toplevel, Label, Canvas, ttk, Frame
 import random
 import time
 import os
@@ -74,16 +74,25 @@ def IniciarJogo():
     nota_5_photo = ImageTk.PhotoImage(nota_5_img)
 
     canvas = Canvas(new_window, width=710, height=250)
+    canvas.configure(background='black', highlightbackground='black')
     canvas.pack()
     
-    # Cria botões na nova janela
-    BTNEsquerda = CTkButton(master=new_window, text="E", width=100, height=100, fg_color='white')
-    BTNEsquerda.pack(side="left", padx=100, pady=10)
-    BTNDireita = CTkButton(master=new_window, text="D", width=100, height=100, fg_color='white')
-    BTNDireita.pack(side="right", padx=100, pady=10)
-    canvas_circulo = Canvas(new_window, width=50, height=50)
-    canvas_circulo.pack()
+    # Cria um Frame para agrupar os botões e o círculo
+    frame_botoes = Frame(new_window)
+    frame_botoes.configure(background='black')
+    frame_botoes.pack()
+
+    # Cria botões e o círculo dentro do Frame
+    BTNEsquerda = CTkButton(master=frame_botoes, text="E", width=100, height=100, fg_color='white')
+    BTNEsquerda.pack(side="left", padx=150, pady=10)
+
+    canvas_circulo = Canvas(frame_botoes, width=50, height=50)
+    canvas_circulo.pack(side="left")
+    canvas_circulo.configure(background='black', highlightbackground='black')
     canvas_circulo.create_oval(5, 5, 45, 45, fill="red")
+
+    BTNDireita = CTkButton(master=frame_botoes, text="D", width=100, height=100, fg_color='white')
+    BTNDireita.pack(side="left", padx=150, pady=10)
 
     # Define qual botão terá a nota de 50 reais
     if QuantidadeNotaEsquerda.get() == "":
@@ -176,7 +185,7 @@ def IniciarJogo():
         canvas.create_image(355, 105, image=nota_5_photo)
         stop_timer()
         pontos += 5
-        print(f"Pontuação: {pontos}")
+        #print(f"Pontuação: {pontos}")
         new_window.after(1000, lambda: canvas.delete("all"))
         new_window.after(10, lambda: BTNDireita.configure(state=DISABLED))
         new_window.after(1000, lambda: BTNDireita.configure(state=NORMAL))
@@ -204,12 +213,13 @@ def IniciarJogo():
         nota_5.configure(command=errou)
     
     # Cria um temporizador
-    tempo_restante = 5
-    timer_label = Label(new_window, text=f"Tempo restante: {tempo_restante} segundos")
+    tempo_total = 5
+    tempo_restante = 0
+    timer_label = Label(new_window, text=f"")
     timer_label.pack()
 
     # Adicione uma barra de progresso
-    progress = ttk.Progressbar(new_window, length=100, mode='determinate', maximum=tempo_restante)
+    progress = ttk.Progressbar(new_window, length=100, mode='determinate', maximum=tempo_total)
     progress.pack()
 
     # Variável de controle para pausar o temporizador
@@ -217,12 +227,12 @@ def IniciarJogo():
 
     def countdown():
         nonlocal tempo_restante
-        if tempo_restante > 0 and not pausar_temporizador:
-            tempo_restante -= 1
-            timer_label.config(text=f"Tempo restante: {tempo_restante} segundos")
+        if tempo_restante < tempo_total and not pausar_temporizador:
+            tempo_restante += 1
+            timer_label.configure(highlightbackground='black')
             progress['value'] = tempo_restante  # Atualiza a barra de progresso
             new_window.after(1000, countdown)
-        elif tempo_restante <= 0:
+        elif tempo_restante >= tempo_total:
             timer_label.config(text="O tempo acabou!")
             new_window.destroy()
 
@@ -230,8 +240,7 @@ def IniciarJogo():
         if not rodadas:  # Se todas as rodadas foram concluídas
             return
         nonlocal tempo_restante, pausar_temporizador
-        tempo_restante = 6
-        timer_label.config(text=f"Tempo restante: {tempo_restante} segundos")
+        tempo_restante = 0
         progress['value'] = 0  # Reinicia a barra de progresso
         pausar_temporizador = False
         countdown()
@@ -269,18 +278,27 @@ def iniciarSegundoJogo():
     nota_50_photo = ImageTk.PhotoImage(nota_50_img)
     nota_5_photo = ImageTk.PhotoImage(nota_5_img)
     
-    # Cria um canvas para exibir a imagem
     canvas = Canvas(new_window, width=710, height=250)
+    canvas.configure(background='black', highlightbackground='black')
     canvas.pack()
     
-    # Cria botões na nova janela
-    BTNEsquerda = CTkButton(master=new_window, text="E", width=100, height=100, fg_color='white')
-    BTNEsquerda.pack(side="left", padx=100, pady=10)
-    BTNDireita = CTkButton(master=new_window, text="D", width=100, height=100, fg_color='white')
-    BTNDireita.pack(side="right", padx=100, pady=10)
-    canvas_circulo = Canvas(new_window, width=50, height=50)
-    canvas_circulo.pack()
+    # Cria um Frame para agrupar os botões e o círculo
+    frame_botoes = Frame(new_window)
+    frame_botoes.configure(background='black')
+    frame_botoes.pack()
+
+    # Cria botões e o círculo dentro do Frame
+    BTNEsquerda = CTkButton(master=frame_botoes, text="E", width=100, height=100, fg_color='white')
+    BTNEsquerda.pack(side="left", padx=150, pady=10)
+
+    canvas_circulo = Canvas(frame_botoes, width=50, height=50)
+    canvas_circulo.pack(side="left")
+    canvas_circulo.configure(background='black', highlightbackground='black')
     canvas_circulo.create_oval(5, 5, 45, 45, fill="red")
+
+    BTNDireita = CTkButton(master=frame_botoes, text="D", width=100, height=100, fg_color='white')
+    BTNDireita.pack(side="left", padx=150, pady=10)
+
     
     # Define qual botão terá a nota de 50 reais
     if QuantidadeNotaEsquerdaJogoDois.get() == "":
@@ -406,12 +424,13 @@ def iniciarSegundoJogo():
         nota_5.configure(command=errou)
     
     # Cria um temporizador
-    tempo_restante = 5
-    timer_label = Label(new_window, text=f"Tempo restante: {tempo_restante} segundos")
+    tempo_total = 5
+    tempo_restante = 0
+    timer_label = Label(new_window, text=f"")
     timer_label.pack()
 
     # Adicione uma barra de progresso
-    progress = ttk.Progressbar(new_window, length=100, mode='determinate', maximum=tempo_restante)
+    progress = ttk.Progressbar(new_window, length=100, mode='determinate', maximum=tempo_total)
     progress.pack()
 
     # Variável de controle para pausar o temporizador
@@ -419,12 +438,12 @@ def iniciarSegundoJogo():
 
     def countdown():
         nonlocal tempo_restante
-        if tempo_restante > 0 and not pausar_temporizador:
-            tempo_restante -= 1
-            timer_label.config(text=f"Tempo restante: {tempo_restante} segundos")
+        if tempo_restante < tempo_total and not pausar_temporizador:
+            tempo_restante += 1
+            timer_label.configure(highlightbackground='black')
             progress['value'] = tempo_restante  # Atualiza a barra de progresso
             new_window.after(1000, countdown)
-        elif tempo_restante <= 0:
+        elif tempo_restante >= tempo_total:
             timer_label.config(text="O tempo acabou!")
             new_window.destroy()
 
@@ -432,11 +451,11 @@ def iniciarSegundoJogo():
         if not rodadas:  # Se todas as rodadas foram concluídas
             return
         nonlocal tempo_restante, pausar_temporizador
-        tempo_restante = 6
-        timer_label.config(text=f"Tempo restante: {tempo_restante} segundos")
+        tempo_restante = 0
         progress['value'] = 0  # Reinicia a barra de progresso
         pausar_temporizador = False
         countdown()
+
 
     def stop_timer():
         nonlocal pausar_temporizador
