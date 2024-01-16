@@ -5,6 +5,7 @@ from tkinter import Toplevel, Label, Canvas, ttk, Frame
 import random
 import time
 import os
+import csv
 
 app = CTk()
 app.geometry("{}x{}+0+0".format(app.winfo_screenwidth(), app.winfo_screenheight()))
@@ -29,21 +30,21 @@ Para jogar é bem simples:\n
 
 def InfosJogo():
     InfosJogo = Toplevel()
-    InfosJogo.geometry("600x300")  # Ajuste para o tamanho desejado
+    InfosJogo.geometry("500x700")  # Ajuste para o tamanho desejado
     InfosJogo.configure(bg='black')
+
+    Img_Info_path = os.path.dirname(os.path.abspath(__file__))
+    Img_Info_Dir_path = os.path.join(Img_Info_path, 'assets/InformacoesJogo.jpeg')
+    Img_Info = Image.open(Img_Info_Dir_path)
+    img = CTkImage(dark_image=Img_Info, light_image=Img_Info, size=(500, 510))
+    CTkLabel(master=InfosJogo, text="", image=img).pack(pady=(38, 0), anchor="center")
+
     message = """
-                            3000ms
-                
-            --1663ms-- <--Seu tempo
-            
-            --1130ms-- <--Tempo médio
-            
-                            0ms 
-                
 Se você fizer um tempo menor do que o tempo médio em cada rodada, \na nota que você achar terá valor dobrado!"""
-    label = Label(InfosJogo, text=message)
-    label.config(font=16, foreground='#fff', background='#000')
-    label.pack()
+    label_text = Label(InfosJogo, text=message)
+    label_text.config(font=16, foreground='#fff', background='#000')
+    label_text.pack()
+
 
 def instruçoes3():
     instruçoes3 = Toplevel()
@@ -94,6 +95,7 @@ def IniciarJogo():
     nota_5_path = os.path.dirname(os.path.abspath(__file__))
     image_5_path = os.path.join(nota_5_path, 'assets/5.jpg')
     nota_5_img = Image.open(image_5_path)
+    
     nota_50_img = nota_50_img.resize((710, 300))
     nota_5_img = nota_5_img.resize((710, 300))
         
@@ -161,12 +163,21 @@ def IniciarJogo():
         media_tempos = sum(tempos_resposta) / len(tempos_resposta)
         #print(f"Tempo decorrido: {tempo_decorrido}")
         #print(f"Média dos tempos: {media_tempos}")
+
         if not rodadas:  # Se todas as rodadas foram concluídas
             stop_timer()
-            timer_label.config(font=40,foreground='#fff', background='#000',text=f"Fim do jogo!\n Acumulado R$:{pontos}\n Acertos:{acerto}\n Total Esquerda:{Total_Esquerdas}\n Média de tempo: {media_tempos:.2f}")
+            timer_label.config(font=40,foreground='#fff', background='#000', text=f"Fim do jogo!\n Acumulado R$:{pontos}\n Acertos:{acerto}\n Total Esquerda:{Total_Esquerdas}\n Média de tempo: {media_tempos:.2f}")
             inciarJogoDois.configure(state=NORMAL)
             FimDeJogo()
+
+            # Escreve as informações em um arquivo CSV
+            with open('jogo_info.csv', 'w', newline='') as file:
+                writer = csv.writer(file)
+                writer.writerow(["Acumulado", "Acertos", "Total Esquerda", "Média de tempo"])
+                writer.writerow([pontos, acerto, Total_Esquerdas, media_tempos])
+
             return
+
         canvas.create_image(355, 105, image=nota_50_photo)
         stop_timer()        
         pontos += 50
@@ -207,7 +218,15 @@ def IniciarJogo():
             timer_label.config(font=40,foreground='#fff', background='#000', text=f"Fim do jogo!\n Acumulado R$:{pontos}\n Acertos:{acerto}\n Total Esquerda:{Total_Esquerdas}\n Média de tempo: {media_tempos:.2f}")
             inciarJogoDois.configure(state=NORMAL)
             FimDeJogo()
+
+            # Escreve as informações em um arquivo CSV
+            with open('jogo_info.csv', 'w', newline='') as file:
+                writer = csv.writer(file)
+                writer.writerow(["Acumulado", "Acertos", "Total Esquerda", "Média de tempo"])
+                writer.writerow([pontos, acerto, Total_Esquerdas, media_tempos])
+
             return
+
         canvas.create_image(355, 105, image=nota_5_photo)
         stop_timer()
         pontos += 5
@@ -380,9 +399,16 @@ def iniciarSegundoJogo():
         #print(f"Média dos tempos: {media_tempos}")
         if not rodadas:  # Se todas as rodadas foram concluídas
             stop_timer()
-            timer_label.config(font=40,foreground='#fff', background='#000',text=f"Fim do jogo!\n Acumulado R$:{pontos}\n Acertos:{acerto}\n Total Esquerda:{Total_Esquerdas}\n Média de tempo:{media_tempos:.2f}")
+            timer_label.config(font=40,foreground='#fff', background='#000', text=f"Fim do jogo!\n Acumulado R$:{pontos}\n Acertos:{acerto}\n Total Esquerda:{Total_Esquerdas}\n Média de tempo: {media_tempos:.2f}")
             inciarJogoDois.configure(state=NORMAL)
             FimDeJogo()
+
+            # Escreve as informações em um arquivo CSV
+            with open('jogo_info_Fase2.csv', 'w', newline='') as file:
+                writer = csv.writer(file)
+                writer.writerow(["Acumulado", "Acertos", "Total Esquerda", "Média de tempo"])
+                writer.writerow([pontos, acerto, Total_Esquerdas, media_tempos])
+
             return
         if tempo_decorrido < media_tempos:
             imagem_nota = nota_100_photo
@@ -424,9 +450,16 @@ def iniciarSegundoJogo():
         #print(f"Média dos tempos: {media_tempos}")
         if not rodadas:  # Se todas as rodadas foram concluídas
             stop_timer()
-            timer_label.config(font=40,foreground='#fff', background='#000',text=f"Fim do jogo!\n Acumulado R$:{pontos}\n Acertos:{acerto}\n Total Esquerda:{Total_Esquerdas}\n Média de tempo: {media_tempos:.2f}")
+            timer_label.config(font=40,foreground='#fff', background='#000', text=f"Fim do jogo!\n Acumulado R$:{pontos}\n Acertos:{acerto}\n Total Esquerda:{Total_Esquerdas}\n Média de tempo: {media_tempos:.2f}")
             inciarJogoDois.configure(state=NORMAL)
             FimDeJogo()
+
+            # Escreve as informações em um arquivo CSV
+            with open('jogo_info_Fase2.csv', 'w', newline='') as file:
+                writer = csv.writer(file)
+                writer.writerow(["Acumulado", "Acertos", "Total Esquerda", "Média de tempo"])
+                writer.writerow([pontos, acerto, Total_Esquerdas, media_tempos])
+
             return
         if tempo_decorrido < media_tempos:
             imagem_nota = nota_10_photo
@@ -436,7 +469,6 @@ def iniciarSegundoJogo():
             pontos += 5
         canvas.create_image(305, 105, image=imagem_nota)
         stop_timer()
-        pontos += 5
         new_window.after(1000, lambda: canvas.delete("all"))
         new_window.after(1000, start_timer)
         new_window.after(10, lambda: BTNDireita.configure(state=DISABLED))
