@@ -1,4 +1,4 @@
-# Jogo de Encontrar a Nota
+# Jogo Find the money
 
 ## Descrição do Projeto
 
