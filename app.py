@@ -45,7 +45,6 @@ Se você fizer um tempo menor do que o tempo médio em cada rodada, \na nota que
     label_text.config(font=16, foreground='#fff', background='#000')
     label_text.pack()
 
-
 def instruçoes3():
     instruçoes3 = Toplevel()
     instruçoes3.geometry("600x300")  # Ajuste para o tamanho desejado
