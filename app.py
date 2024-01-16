@@ -56,7 +56,7 @@ informationJogo = CTkButton(master=sidebar_frame, text="Informações sobre o jo
 
 def IniciarJogo():
     new_window = Toplevel(app)
-    new_window.geometry("1024x768")
+    new_window.geometry("{}x{}+0+0".format(app.winfo_screenwidth(), app.winfo_screenheight()))
     new_window.configure(bg='black')
     
     #Carregando a nota de 50
@@ -83,16 +83,16 @@ def IniciarJogo():
     frame_botoes.pack()
 
     # Cria botões e o círculo dentro do Frame
-    BTNEsquerda = CTkButton(master=frame_botoes, text="E", width=100, height=100, fg_color='white')
-    BTNEsquerda.pack(side="left", padx=150, pady=10)
+    BTNEsquerda = CTkButton(master=frame_botoes, text="E", width=150, height=150, fg_color='white')
+    BTNEsquerda.pack(side="left", padx=220, pady=10)
 
-    canvas_circulo = Canvas(frame_botoes, width=50, height=50)
+    canvas_circulo = Canvas(frame_botoes, width=150, height=150)
     canvas_circulo.pack(side="left")
     canvas_circulo.configure(background='black', highlightbackground='black')
-    canvas_circulo.create_oval(5, 5, 45, 45, fill="red")
+    canvas_circulo.create_oval(0, 0, 100, 100, fill="red")
 
-    BTNDireita = CTkButton(master=frame_botoes, text="D", width=100, height=100, fg_color='white')
-    BTNDireita.pack(side="left", padx=150, pady=10)
+    BTNDireita = CTkButton(master=frame_botoes, text="D", width=150, height=150, fg_color='white')
+    BTNDireita.pack(side="left", padx=200, pady=10)
 
     # Define qual botão terá a nota de 50 reais
     if QuantidadeNotaEsquerda.get() == "":
@@ -254,7 +254,7 @@ def IniciarJogo():
 
 def iniciarSegundoJogo():
     new_window = Toplevel(app)
-    new_window.geometry("1024x768")
+    new_window.geometry("{}x{}+0+0".format(app.winfo_screenwidth(), app.winfo_screenheight()))
     new_window.configure(bg='black')
     
     #Carregando a nota de 100
@@ -288,16 +288,16 @@ def iniciarSegundoJogo():
     frame_botoes.pack()
 
     # Cria botões e o círculo dentro do Frame
-    BTNEsquerda = CTkButton(master=frame_botoes, text="E", width=100, height=100, fg_color='white')
-    BTNEsquerda.pack(side="left", padx=150, pady=10)
+    BTNEsquerda = CTkButton(master=frame_botoes, text="E", width=150, height=150, fg_color='white')
+    BTNEsquerda.pack(side="left", padx=220, pady=10)
 
-    canvas_circulo = Canvas(frame_botoes, width=50, height=50)
+    canvas_circulo = Canvas(frame_botoes, width=150, height=150)
     canvas_circulo.pack(side="left")
     canvas_circulo.configure(background='black', highlightbackground='black')
-    canvas_circulo.create_oval(5, 5, 45, 45, fill="red")
+    canvas_circulo.create_oval(0, 0, 100, 100, fill="red")
 
-    BTNDireita = CTkButton(master=frame_botoes, text="D", width=100, height=100, fg_color='white')
-    BTNDireita.pack(side="left", padx=150, pady=10)
+    BTNDireita = CTkButton(master=frame_botoes, text="D", width=150, height=150, fg_color='white')
+    BTNDireita.pack(side="left", padx=200, pady=10)
 
     
     # Define qual botão terá a nota de 50 reais
