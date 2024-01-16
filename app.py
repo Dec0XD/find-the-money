@@ -14,23 +14,50 @@ app.title("app")
 set_appearance_mode("dark")
 
 def MostrarInformaçao():
-    CTkMessagebox(title="Instruções Primeira Fase", 
-                  message="""
+    MostrarInformaçao = Toplevel()
+    MostrarInformaçao.geometry("600x300")  # Ajuste para o tamanho desejado
+    MostrarInformaçao.configure(bg='black')
+    message = """
 Bem vindo! Vamos dar início ao jogo.\n
 Para jogar é bem simples:\n
-1. Escolha um dos botões, ou da esquerda ou da direita, e tente encontrar a nota de 50 reais.
+1. Escolha um dos botões, ou da esquerda ou da direita, \ne tente encontrar a nota de 50 reais.
 2. No início de cada rodada posicione o mouse no círculo vermelho.
-3. Cuidado! Se demorar muito para escolher, voltará para o início do jogo.""")
+3. Cuidado! Se demorar muito para escolher, voltará para o início do jogo."""
+    label = Label(MostrarInformaçao, text=message)
+    label.config(font=16, foreground='#fff', background='#000')
+    label.pack()
+
 def InfosJogo():
-    CTkMessagebox(title="Instruções Segunda Fase", 
-                message="Se você fizer um tempo menor do que o tempo médio em cada rodada, a nota que você achar terá valor dobrado!")
+    InfosJogo = Toplevel()
+    InfosJogo.geometry("600x300")  # Ajuste para o tamanho desejado
+    InfosJogo.configure(bg='black')
+    message = """
+                            3000ms
+                
+            --1663ms-- <--Seu tempo
+            
+            --1130ms-- <--Tempo médio
+            
+                            0ms 
+                
+Se você fizer um tempo menor do que o tempo médio em cada rodada, \na nota que você achar terá valor dobrado!"""
+    label = Label(InfosJogo, text=message)
+    label.config(font=16, foreground='#fff', background='#000')
+    label.pack()
+
 def instruçoes3():
-    CTkMessagebox(title="Informações sobre o jogo", 
-                message="""O jogo tem um formato padrão:
+    instruçoes3 = Toplevel()
+    instruçoes3.geometry("600x300")  # Ajuste para o tamanho desejado
+    instruçoes3.configure(bg='black')
+    message = """O jogo tem um formato padrão:
 Nas duas fases a porcentagem das notas aparecerem do lado esquerdo é de 50%.
 Na primeira fase o número de rodadas é 10.
 Na segunda fase o número de rodadas é 40.
-Obs: Você pode alterar esses valores escrevendo em suas respectivas caixas.""")
+Obs: Você pode alterar esses valores escrevendo em suas respectivas caixas."""
+    label = Label(instruçoes3, text=message)
+    label.config(font=16, foreground='#fff', background='#000')
+    label.pack()
+
 
 sidebar_frame = CTkFrame(master=app, fg_color="#070F1F", width=500, height=800, corner_radius=0)
 sidebar_frame.pack_propagate(0)
@@ -82,7 +109,6 @@ def IniciarJogo():
     frame_botoes.configure(background='black')
     frame_botoes.pack()
 
-    # Cria botões e o círculo dentro do Frame
     BTNEsquerda = CTkButton(master=frame_botoes, text="E", width=150, height=150, fg_color='white')
     BTNEsquerda.pack(side="left", padx=220, pady=10)
 
@@ -137,7 +163,7 @@ def IniciarJogo():
         #print(f"Média dos tempos: {media_tempos}")
         if not rodadas:  # Se todas as rodadas foram concluídas
             stop_timer()
-            timer_label.config(text=f"Fim do jogo!\n Acumulado R$:{pontos}\n Acertos:{acerto}\n Total Esquerda:{Total_Esquerdas}\n Média de tempo: {media_tempos:.2f}")
+            timer_label.config(font=40,foreground='#fff', background='#000',text=f"Fim do jogo!\n Acumulado R$:{pontos}\n Acertos:{acerto}\n Total Esquerda:{Total_Esquerdas}\n Média de tempo: {media_tempos:.2f}")
             inciarJogoDois.configure(state=NORMAL)
             FimDeJogo()
             return
@@ -178,7 +204,7 @@ def IniciarJogo():
         #print(f"Média dos tempos: {media_tempos}")
         if not rodadas:  # Se todas as rodadas foram concluídas
             stop_timer()
-            timer_label.config(text=f"Fim do jogo!\n Acumulado R$:{pontos}\n Acertos:{acerto}\n Total Esquerda:{Total_Esquerdas}\n Média de tempo: {media_tempos:.2f}")
+            timer_label.config(font=40,foreground='#fff', background='#000', text=f"Fim do jogo!\n Acumulado R$:{pontos}\n Acertos:{acerto}\n Total Esquerda:{Total_Esquerdas}\n Média de tempo: {media_tempos:.2f}")
             inciarJogoDois.configure(state=NORMAL)
             FimDeJogo()
             return
@@ -215,11 +241,14 @@ def IniciarJogo():
     # Cria um temporizador
     tempo_total = 5
     tempo_restante = 0
-    timer_label = Label(new_window, text=f"")
+    timer_label = Label(new_window)
     timer_label.pack()
 
-    # Adicione uma barra de progresso
-    progress = ttk.Progressbar(new_window, length=100, mode='determinate', maximum=tempo_total)
+        # Adicione uma barra de progresso
+    style = ttk.Style()
+    style.configure("TProgressbar", thickness=50)
+
+    progress = ttk.Progressbar(new_window, length=300, mode='determinate', maximum=tempo_total, style="TProgressbar")
     progress.pack()
 
     # Variável de controle para pausar o temporizador
@@ -229,11 +258,11 @@ def IniciarJogo():
         nonlocal tempo_restante
         if tempo_restante < tempo_total and not pausar_temporizador:
             tempo_restante += 1
-            timer_label.configure(highlightbackground='black')
+            timer_label.configure(background='black')
             progress['value'] = tempo_restante  # Atualiza a barra de progresso
             new_window.after(1000, countdown)
         elif tempo_restante >= tempo_total:
-            timer_label.config(text="O tempo acabou!")
+            timer_label.config(text="O tempo acabou!", textcolor='#fff')
             new_window.destroy()
 
     def start_timer():
@@ -265,6 +294,10 @@ def iniciarSegundoJogo():
     nota_50_path = os.path.dirname(os.path.abspath(__file__))
     image_50_path = os.path.join(nota_50_path, 'assets/50.jpg')
     nota_50_img = Image.open(image_50_path)
+    #Carregando a nota de 10
+    nota_10_path = os.path.dirname(os.path.abspath(__file__))
+    image_10_path = os.path.join(nota_10_path, 'assets/10.jpg')
+    nota_10_img = Image.open(image_10_path)
     #Carregando a nota de 2
     nota_5_path = os.path.dirname(os.path.abspath(__file__))
     image_5_path = os.path.join(nota_5_path, 'assets/5.jpg')
@@ -276,6 +309,7 @@ def iniciarSegundoJogo():
         
     nota_100_photo = ImageTk.PhotoImage(nota_100_img)
     nota_50_photo = ImageTk.PhotoImage(nota_50_img)
+    nota_10_photo = ImageTk.PhotoImage(nota_10_img)
     nota_5_photo = ImageTk.PhotoImage(nota_5_img)
     
     canvas = Canvas(new_window, width=710, height=250)
@@ -346,7 +380,7 @@ def iniciarSegundoJogo():
         #print(f"Média dos tempos: {media_tempos}")
         if not rodadas:  # Se todas as rodadas foram concluídas
             stop_timer()
-            timer_label.config(text=f"Fim do jogo!\n Acumulado R$:{pontos}\n Acertos:{acerto}\n Total Esquerda:{Total_Esquerdas}\n Média de tempo:{media_tempos:.2f}")
+            timer_label.config(font=40,foreground='#fff', background='#000',text=f"Fim do jogo!\n Acumulado R$:{pontos}\n Acertos:{acerto}\n Total Esquerda:{Total_Esquerdas}\n Média de tempo:{media_tempos:.2f}")
             inciarJogoDois.configure(state=NORMAL)
             FimDeJogo()
             return
@@ -390,11 +424,17 @@ def iniciarSegundoJogo():
         #print(f"Média dos tempos: {media_tempos}")
         if not rodadas:  # Se todas as rodadas foram concluídas
             stop_timer()
-            timer_label.config(text=f"Fim do jogo!\n Acumulado R$:{pontos}\n Acertos:{acerto}\n Total Esquerda:{Total_Esquerdas}\n Média de tempo: {media_tempos:.2f}")
+            timer_label.config(font=40,foreground='#fff', background='#000',text=f"Fim do jogo!\n Acumulado R$:{pontos}\n Acertos:{acerto}\n Total Esquerda:{Total_Esquerdas}\n Média de tempo: {media_tempos:.2f}")
             inciarJogoDois.configure(state=NORMAL)
             FimDeJogo()
             return
-        canvas.create_image(305, 105, image=nota_5_photo)
+        if tempo_decorrido < media_tempos:
+            imagem_nota = nota_10_photo
+            pontos += 10
+        else:
+            imagem_nota = nota_5_photo
+            pontos += 5
+        canvas.create_image(305, 105, image=imagem_nota)
         stop_timer()
         pontos += 5
         new_window.after(1000, lambda: canvas.delete("all"))
@@ -440,7 +480,7 @@ def iniciarSegundoJogo():
         nonlocal tempo_restante
         if tempo_restante < tempo_total and not pausar_temporizador:
             tempo_restante += 1
-            timer_label.configure(highlightbackground='black')
+            timer_label.configure(background='black')
             progress['value'] = tempo_restante  # Atualiza a barra de progresso
             new_window.after(1000, countdown)
         elif tempo_restante >= tempo_total:
