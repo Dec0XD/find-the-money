@@ -11,7 +11,6 @@ app = CTk()
 app.geometry("{}x{}+0+0".format(app.winfo_screenwidth(), app.winfo_screenheight()))
 app.title("Find the money")
 
-
 set_appearance_mode("dark")
 
 def MostrarInformaçao():
@@ -27,34 +26,6 @@ Para jogar é bem simples:\n
     label = Label(MostrarInformaçao, text=message)
     label.config(font=16, foreground='#fff', background='#000')
     label.pack()
-
-def InfosJogo():
-    InfosJogo = Toplevel()
-    InfosJogo.geometry("600x400")  # Ajuste para o tamanho desejado
-    InfosJogo.configure(bg='black')
-    message = """
-No segundo jogo, o tempo será seu maior aliado! 
-Se você conseguir um tempo menor do que a média em cada rodada,
-a nota que você encontrar terá seu valor dobrado. 
-
-Por exemplo, se a média de tempo escolhida for de 3 segundos e 
-você acertar o lugar da nota de 50, a nota e a pontuação que 
-você receberá será de 100! O mesmo acontece para a nota de 5,
-que se transformará em 10!
-
-Vamos ver um exemplo:
-
-- Tempo máximo: 3s
-- Tempo médio escolhido: 1,5s
-- Seu tempo: 1s
-
-Nesse caso, como o seu tempo é menor que o tempo médio escolhido, 
-a nota que você encontrar terá seu valor dobrado!
-
-    """
-    label_text = Label(InfosJogo, text=message)
-    label_text.config(font=16, foreground='#fff', background='#000')
-    label_text.pack()
 
 def instruçoes3():
     instruçoes3 = Toplevel()
@@ -131,7 +102,7 @@ def IniciarJogo():
         new_window.after(10, lambda: BTNDireita.configure(state=DISABLED))
         new_window.after(10, lambda: BTNEsquerda.configure(state=DISABLED))
         
-    global tempo_inicio, pontos, acerto, Total_Esquerdas, duracao
+    global tempo_inicio, pontos, acerto, Total_Esquerdas, duracao, media_tempos
     pontos = 0 
     acerto = 0
     Total_Esquerdas = 0 
@@ -140,7 +111,7 @@ def IniciarJogo():
         
     tempos_resposta = []
     def acertou(button_clicked):
-        global tempo_inicio, pontos, acerto, Total_Esquerdas, duracao
+        global tempo_inicio, pontos, acerto, Total_Esquerdas, duracao, media_tempos
         duracao = tempo_inicio
         tempo_fim = time.time()
         tempo_decorrido = (tempo_fim - tempo_inicio)
@@ -191,7 +162,7 @@ def IniciarJogo():
         nota_5.configure(command=lambda: errou(nota_5))
 
     def errou(button_clicked):
-        global tempo_inicio, pontos, acerto, Total_Esquerdas, duracao
+        global tempo_inicio, pontos, acerto, Total_Esquerdas, duracao, media_tempos
         duracao = tempo_inicio
         tempo_fim = time.time()
         tempo_decorrido = (tempo_fim - tempo_inicio)
@@ -359,7 +330,7 @@ def iniciarSegundoJogo():
         total_rodadas = int(NumeroRodadasJogoDois.get())
     
     if mediajogo.get() == "" or mediajogo.get() == "0":
-        quantidadetempo = 2.5
+        quantidadetempo = media_tempos
     else:
         quantidadetempo = float(mediajogo.get())
         
@@ -537,6 +508,31 @@ def iniciarSegundoJogo():
     # Inicia o temporizador
     start_timer()
 
+def InfosJogo():
+    InfosJogo = Toplevel()
+    InfosJogo.geometry("600x400")  # Ajuste para o tamanho desejado
+    InfosJogo.configure(bg='black')
+    message = f"""
+No segundo jogo, o tempo será seu maior aliado (ou não)! 
+Se você conseguir um tempo menor do que a média das outras pessoas 
+em cada rodada, a nota que você encontrar terá seu valor dobrado. 
+
+Por exemplo, considere que a média de tempo das pessoas que jogaram 
+foi de 2 segundos e você apertou um dos lados em 1.5 segundos. Se 
+você acertar o lugar da nota de 50, a nota e a pontuação que você 
+receberá será de 100! O mesmo acontece para a nota de 5, que se 
+transformará em 10!
+No primeiro jogo, os resultados foram os seguintes: 
+- Tempo médio da população: 1.3 s
+- Seu tempo: {media_tempos:.2f}
+
+Nesse caso, você tem que apertar o botão em menos de 1.3 segundos 
+para ganhar o valor dobrado!
+
+    """
+    label_text = Label(InfosJogo, text=message)
+    label_text.config(font=16, foreground='#fff', background='#000')
+    label_text.pack()
 def validate_input(event):
     # Verifica se o valor inserido é um dígito, a tecla backspace ou o ponto
     if not (event.char.isdigit() or event.char == "." or event.keysym == "BackSpace"):
