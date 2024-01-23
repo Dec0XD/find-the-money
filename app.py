@@ -84,8 +84,8 @@ def IniciarJogo():
     image_5_path = os.path.join(nota_5_path, 'assets/5.jpg')
     nota_5_img = Image.open(image_5_path)
     
-    nota_50_img = nota_50_img.resize((710, 300))
-    nota_5_img = nota_5_img.resize((710, 300))
+    nota_50_img = nota_50_img.resize((610, 200))
+    nota_5_img = nota_5_img.resize((610, 200))
         
     nota_50_photo = ImageTk.PhotoImage(nota_50_img)
     nota_5_photo = ImageTk.PhotoImage(nota_5_img)
@@ -313,10 +313,10 @@ def iniciarSegundoJogo():
     image_5_path = os.path.join(nota_5_path, 'assets/5.jpg')
     nota_5_img = Image.open(image_5_path)
         
-    nota_100_img = nota_100_img.resize((710, 300))
-    nota_50_img = nota_50_img.resize((710, 300))
-    nota_10_img = nota_10_img.resize((710, 300))
-    nota_5_img = nota_5_img.resize((710, 300))
+    nota_100_img = nota_100_img.resize((610, 200))
+    nota_50_img = nota_50_img.resize((610, 200))
+    nota_10_img = nota_10_img.resize((610, 200))
+    nota_5_img = nota_5_img.resize((610, 200))
         
     nota_100_photo = ImageTk.PhotoImage(nota_100_img)
     nota_50_photo = ImageTk.PhotoImage(nota_50_img)
