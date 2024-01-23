@@ -9,7 +9,7 @@ import csv
 
 app = CTk()
 app.geometry("{}x{}+0+0".format(app.winfo_screenwidth(), app.winfo_screenheight()))
-app.title("app")
+app.title("Find the money")
 
 
 set_appearance_mode("dark")
@@ -58,32 +58,9 @@ Obs: Você pode alterar esses valores escrevendo em suas respectivas caixas."""
     label.config(font=16, foreground='#fff', background='#000')
     label.pack()
 
-
-sidebar_frame = CTkFrame(master=app, fg_color="#070F1F", width=500, height=800, corner_radius=0)
-sidebar_frame.pack_propagate(0)
-sidebar_frame.pack(fill="y", anchor="w", side="left")
-
-#carregando a foto do GPDOC
-logo_path = os.path.dirname(os.path.abspath(__file__))
-image_logo_path = os.path.join(logo_path, 'assets/GPDOC.png')
-logo_img_data = Image.open(image_logo_path)
-
-logo_img = CTkImage(dark_image=logo_img_data, light_image=logo_img_data, size=(300, 310))
-
-CTkLabel(master=sidebar_frame, text="", image=logo_img).pack(pady=(38, 0), anchor="center")
-CTkLabel(master=sidebar_frame, text="Para mais informações", font=("Arial Bold", 16)).pack(pady=(38, 0), anchor="center")
-#CTkLabel(master=sidebar_frame, text="clique aqui").pack(pady=(2, 0), anchor="center")
-
-informationApp = CTkButton(master=sidebar_frame, text="Instruções Primeira Fase", command=MostrarInformaçao, width=200, height=50).pack(pady=(10,0), anchor="center")
-informationJogo = CTkButton(master=sidebar_frame, text="Instruções Segunda Fase", command=InfosJogo, width=200, height=50).pack(pady=(10,0), anchor="center")
-informationJogo = CTkButton(master=sidebar_frame, text="Informações sobre o jogo", command=instruçoes3, width=200, height=50).pack(pady=(10,0), anchor="center")
-
-#scrollable_content_frame = CTkScrollableFrame(master=app, fg_color="#CEC9DF")
-#scrollable_content_frame.pack(expand=True, fill="both", padx=20, pady=20)
-
 def IniciarJogo():
     new_window = Toplevel(app)
-    new_window.geometry("{}x{}+0+0".format(app.winfo_screenwidth(), app.winfo_screenheight()))
+    new_window.geometry("{}x{}+0+0".format(new_window.winfo_screenwidth(), new_window.winfo_screenheight()))
     new_window.configure(bg='black')
     
     #Carregando a nota de 50
@@ -167,6 +144,7 @@ def IniciarJogo():
             stop_timer()
             timer_label.config(font=40,foreground='#fff', background='#000', text=f"Fim do jogo!\n Acumulado R$:{pontos}\n Acertos:{acerto}\n Total Esquerda:{Total_Esquerdas}\n Média de tempo: {media_tempos:.2f}")
             inciarJogoDois.configure(state=NORMAL)
+            informationJogo.configure(state=NORMAL)
             FimDeJogo()
 
             # Escreve as informações em um arquivo CSV
@@ -176,7 +154,6 @@ def IniciarJogo():
                 writer.writerow([pontos, acerto, Total_Esquerdas, media_tempos])
 
             return
-
         canvas.create_image(355, 105, image=nota_50_photo)
         stop_timer()        
         pontos += 50
@@ -216,6 +193,7 @@ def IniciarJogo():
             stop_timer()
             timer_label.config(font=40,foreground='#fff', background='#000', text=f"Fim do jogo!\n Acumulado R$:{pontos}\n Acertos:{acerto}\n Total Esquerda:{Total_Esquerdas}\n Média de tempo: {media_tempos:.2f}")
             inciarJogoDois.configure(state=NORMAL)
+            informationJogo.configure(state=NORMAL)
             FimDeJogo()
 
             # Escreve as informações em um arquivo CSV
@@ -225,7 +203,6 @@ def IniciarJogo():
                 writer.writerow([pontos, acerto, Total_Esquerdas, media_tempos])
 
             return
-
         canvas.create_image(355, 105, image=nota_5_photo)
         stop_timer()
         pontos += 5
@@ -262,7 +239,7 @@ def IniciarJogo():
     timer_label = Label(new_window)
     timer_label.pack()
 
-        # Adicione uma barra de progresso
+    # Adicione uma barra de progresso
     style = ttk.Style()
     style.configure("TProgressbar", thickness=50)
 
@@ -280,7 +257,7 @@ def IniciarJogo():
             progress['value'] = tempo_restante  # Atualiza a barra de progresso
             new_window.after(1000, countdown)
         elif tempo_restante >= tempo_total:
-            timer_label.config(text="O tempo acabou!", textcolor='#fff')
+            timer_label.config(font=40,foreground='#fff', background='#000', text="O tempo acabou!")
             new_window.destroy()
 
     def start_timer():
@@ -539,7 +516,34 @@ def validate_input(event):
     # Verifica se o valor inserido é um dígito ou a tecla backspace
     if not event.char.isdigit() and event.keysym != "BackSpace":
         return "break"  # Ignora o evento se não for um dígito ou backspace
-    
+
+#Configuração do sidebar
+sidebar_frame = CTkFrame(master=app, fg_color="#070F1F", width=500, height=800, corner_radius=0)
+sidebar_frame.pack_propagate(0)
+sidebar_frame.pack(fill="y", anchor="w", side="left")
+
+#carregando a foto do GPDOC
+logo_path = os.path.dirname(os.path.abspath(__file__))
+image_logo_path = os.path.join(logo_path, 'assets/GPDOC.png')
+logo_img_data = Image.open(image_logo_path)
+
+logo_img = CTkImage(dark_image=logo_img_data, light_image=logo_img_data, size=(300, 310))
+
+CTkLabel(master=sidebar_frame, text="", image=logo_img).pack(pady=(38, 0), anchor="center")
+CTkLabel(master=sidebar_frame, text="Para mais informações", font=("Arial Bold", 16)).pack(pady=(38, 0), anchor="center")
+#CTkLabel(master=sidebar_frame, text="clique aqui").pack(pady=(2, 0), anchor="center")
+
+informationApp = CTkButton(master=sidebar_frame, text="Instruções Primeira Fase", command=MostrarInformaçao, width=200, height=50).pack(pady=(10,0), anchor="center")
+informationJogo = CTkButton(master=sidebar_frame, text="Instruções Segunda Fase", command=InfosJogo, width=200, height=50, state=DISABLED)
+informationJogo.pack(pady=(10,0), anchor="center")
+informationJogo2 = CTkButton(master=sidebar_frame, text="Informações sobre o jogo", command=instruçoes3, width=200, height=50).pack(pady=(10,0), anchor="center")
+# Final do sidebar
+
+#Teste Scroll
+#scrollable_content_frame = CTkScrollableFrame(master=app, fg_color="#CEC9DF")
+#scrollable_content_frame.pack(expand=True, fill="both", padx=20, pady=20)
+
+#Tela principal
 CTkLabel(master=app, text="Primeira fase!", text_color="#fff",
         justify="center", font=("Arial Bold", 32)).pack(anchor="center", pady=(10, 5),padx=(25, 0))
 
