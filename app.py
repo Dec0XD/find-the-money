@@ -422,6 +422,7 @@ def iniciarSegundoJogo():
         new_window.after(1000, lambda: BTNDireita.configure(state=NORMAL))
         new_window.after(10, lambda: BTNEsquerda.configure(state=DISABLED))
         new_window.after(1000, lambda: BTNEsquerda.configure(state=NORMAL))
+        new_window.after(1000, start_timer)
         rodada = rodadas.pop(0)
         if rodada == "esquerda":
             nota_50 = BTNEsquerda
@@ -471,6 +472,7 @@ def iniciarSegundoJogo():
         new_window.after(1000, lambda: BTNDireita.configure(state=NORMAL))
         new_window.after(10, lambda: BTNEsquerda.configure(state=DISABLED))
         new_window.after(1000, lambda: BTNEsquerda.configure(state=NORMAL))
+        new_window.after(1000, start_timer)
         rodada = rodadas.pop(0)
         if rodada == "esquerda":
             nota_50 = BTNEsquerda
