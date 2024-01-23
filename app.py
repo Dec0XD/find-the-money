@@ -30,17 +30,28 @@ Para jogar é bem simples:\n
 
 def InfosJogo():
     InfosJogo = Toplevel()
-    InfosJogo.geometry("500x700")  # Ajuste para o tamanho desejado
+    InfosJogo.geometry("600x400")  # Ajuste para o tamanho desejado
     InfosJogo.configure(bg='black')
-
-    Img_Info_path = os.path.dirname(os.path.abspath(__file__))
-    Img_Info_Dir_path = os.path.join(Img_Info_path, 'assets/InformacoesJogo.jpeg')
-    Img_Info = Image.open(Img_Info_Dir_path)
-    img = CTkImage(dark_image=Img_Info, light_image=Img_Info, size=(500, 510))
-    CTkLabel(master=InfosJogo, text="", image=img).pack(pady=(38, 0), anchor="center")
-
     message = """
-Se você fizer um tempo menor do que o tempo médio em cada rodada, \na nota que você achar terá valor dobrado!"""
+No segundo jogo, o tempo será seu maior aliado! 
+Se você conseguir um tempo menor do que a média em cada rodada,
+a nota que você encontrar terá seu valor dobrado. 
+
+Por exemplo, se a média de tempo escolhida for de 3 segundos e 
+você acertar o lugar da nota de 50, a nota e a pontuação que 
+você receberá será de 100! O mesmo acontece para a nota de 5,
+que se transformará em 10!
+
+Vamos ver um exemplo:
+
+- Tempo máximo: 3s
+- Tempo médio escolhido: 1,5s
+- Seu tempo: 1s
+
+Nesse caso, como o seu tempo é menor que o tempo médio escolhido, 
+a nota que você encontrar terá seu valor dobrado!
+
+    """
     label_text = Label(InfosJogo, text=message)
     label_text.config(font=16, foreground='#fff', background='#000')
     label_text.pack()
@@ -87,7 +98,7 @@ def IniciarJogo():
     frame_botoes.configure(background='black')
     frame_botoes.pack()
 
-    BTNEsquerda = CTkButton(master=frame_botoes, text="E", width=150, height=150, fg_color='white')
+    BTNEsquerda = CTkButton(master=frame_botoes, text="E", width=150, height=150, fg_color='white', hover=None)
     BTNEsquerda.pack(side="left", padx=220, pady=100)
 
     canvas_circulo = Canvas(frame_botoes, width=150, height=150)
@@ -95,7 +106,7 @@ def IniciarJogo():
     canvas_circulo.configure(background='black', highlightbackground='black')
     canvas_circulo.create_oval(0, 0, 100, 100, fill="red")
 
-    BTNDireita = CTkButton(master=frame_botoes, text="D", width=150, height=150, fg_color='white')
+    BTNDireita = CTkButton(master=frame_botoes, text="Clicado", width=150, height=150, fg_color='white', hover=None)
     BTNDireita.pack(side="left", padx=200, pady=100)
 
     # Define qual botão terá a nota de 50 reais
@@ -342,7 +353,10 @@ def iniciarSegundoJogo():
         total_rodadas = 40
     else:
         total_rodadas = int(NumeroRodadasJogoDois.get())
-
+    
+    if mediajogo.get() == "" or mediajogo.get() == "0":
+        quantidadetempo = 2.5
+        
     rodadas_esquerdaJogoDois = round(total_rodadas * percentual_esquerdaJogoDois)
     rodadas = ["esquerda"] * rodadas_esquerdaJogoDois + ["direita"] * (total_rodadas - rodadas_esquerdaJogoDois)
     random.shuffle(rodadas)
@@ -386,7 +400,7 @@ def iniciarSegundoJogo():
                 writer.writerow(["Acumulado", "Acertos", "Total Esquerda", "Média de tempo"])
                 writer.writerow([pontos, acerto, Total_Esquerdas, media_tempos])
             return
-        if tempo_decorrido < media_tempos:
+        if tempo_decorrido < quantidadetempo:
             imagem_nota = nota_100_photo
             pontos += 100
         else:
@@ -423,7 +437,8 @@ def iniciarSegundoJogo():
         #print(f"Tempos de resposta: {tempos_resposta}")  # Imprime a lista de tempos de resposta
         media_tempos = sum(tempos_resposta) / len(tempos_resposta)
         print(f"Tempo decorrido: {tempo_decorrido}")
-        print(f"Média dos tempos: {media_tempos}")
+        print(f"Tempos de resposta: {quantidadetempo}")
+        #print(f"Média dos tempos: {media_tempos}")
         if not rodadas:  # Se todas as rodadas foram concluídas
             stop_timer()
             timer_label.config(font=40,foreground='#fff', background='#000', text=f"Fim do jogo!\n Acumulado R$:{pontos}\n Acertos:{acerto}\n Total Esquerda:{Total_Esquerdas}\n Média de tempo: {media_tempos:.2f}")
@@ -437,7 +452,7 @@ def iniciarSegundoJogo():
                 writer.writerow([pontos, acerto, Total_Esquerdas, media_tempos])
 
             return
-        if tempo_decorrido < media_tempos:
+        if tempo_decorrido < quantidadetempo:
             imagem_nota = nota_10_photo
             pontos += 10
         else:
@@ -583,6 +598,13 @@ CTkLabel(master=app, text="Insira o número de rodadas.", text_color="#fff",
 NumeroRodadasJogoDois = CTkEntry(app, placeholder_text="Apenas Números!", width=200, height=50)
 NumeroRodadasJogoDois.pack(anchor="center", pady=(0, 5),padx=(25, 0))
 NumeroRodadasJogoDois.bind("<Key>", validate_input)
+
+CTkLabel(master=app, text="Insira a média de tempo desejada.", text_color="#fff",
+        justify="center", font=("Arial Bold", 24)).pack(anchor="center", pady=(5, 5),padx=(25, 0))
+
+mediajogo = CTkEntry(app, placeholder_text="Apenas Números!", width=200, height=50)
+mediajogo.pack(anchor="center", pady=(0, 5),padx=(25, 0))
+mediajogo.bind("<Key>", validate_input)
 
 CTkLabel(master=app, text="Aperte o botão para iniciar o jogo!", text_color="#fff",
         justify="center", font=("Arial Bold", 24)).pack(anchor="center", pady=(5, 5),padx=(25, 0))  
