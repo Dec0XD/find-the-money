@@ -78,7 +78,7 @@ def IniciarJogo():
     nota_50_photo = ImageTk.PhotoImage(nota_50_img)
     nota_5_photo = ImageTk.PhotoImage(nota_5_img)
 
-    canvas = Canvas(new_window, width=710, height=250)
+    canvas = Canvas(new_window, width=720, height=310)
     canvas.configure(background='black', highlightbackground='black')
     canvas.pack()
     
@@ -88,7 +88,7 @@ def IniciarJogo():
     frame_botoes.pack()
 
     BTNEsquerda = CTkButton(master=frame_botoes, text="E", width=150, height=150, fg_color='white')
-    BTNEsquerda.pack(side="left", padx=220, pady=10)
+    BTNEsquerda.pack(side="left", padx=220, pady=100)
 
     canvas_circulo = Canvas(frame_botoes, width=150, height=150)
     canvas_circulo.pack(side="left")
@@ -96,7 +96,7 @@ def IniciarJogo():
     canvas_circulo.create_oval(0, 0, 100, 100, fill="red")
 
     BTNDireita = CTkButton(master=frame_botoes, text="D", width=150, height=150, fg_color='white')
-    BTNDireita.pack(side="left", padx=200, pady=10)
+    BTNDireita.pack(side="left", padx=200, pady=100)
 
     # Define qual botão terá a nota de 50 reais
     if QuantidadeNotaEsquerda.get() == "":
@@ -154,7 +154,7 @@ def IniciarJogo():
                 writer.writerow([pontos, acerto, Total_Esquerdas, media_tempos])
 
             return
-        canvas.create_image(355, 105, image=nota_50_photo)
+        canvas.create_image(390, 170, image=nota_50_photo)
         stop_timer()        
         pontos += 50
         acerto += 1
@@ -203,7 +203,7 @@ def IniciarJogo():
                 writer.writerow([pontos, acerto, Total_Esquerdas, media_tempos])
 
             return
-        canvas.create_image(355, 105, image=nota_5_photo)
+        canvas.create_image(390, 170, image=nota_5_photo)
         stop_timer()
         pontos += 5
         #print(f"Pontuação: {pontos}")
@@ -300,6 +300,7 @@ def iniciarSegundoJogo():
         
     nota_100_img = nota_100_img.resize((710, 300))
     nota_50_img = nota_50_img.resize((710, 300))
+    nota_10_img = nota_10_img.resize((710, 300))
     nota_5_img = nota_5_img.resize((710, 300))
         
     nota_100_photo = ImageTk.PhotoImage(nota_100_img)
@@ -307,7 +308,7 @@ def iniciarSegundoJogo():
     nota_10_photo = ImageTk.PhotoImage(nota_10_img)
     nota_5_photo = ImageTk.PhotoImage(nota_5_img)
     
-    canvas = Canvas(new_window, width=710, height=250)
+    canvas = Canvas(new_window, width=710, height=300)
     canvas.configure(background='black', highlightbackground='black')
     canvas.pack()
     
@@ -318,7 +319,7 @@ def iniciarSegundoJogo():
 
     # Cria botões e o círculo dentro do Frame
     BTNEsquerda = CTkButton(master=frame_botoes, text="E", width=150, height=150, fg_color='white')
-    BTNEsquerda.pack(side="left", padx=220, pady=10)
+    BTNEsquerda.pack(side="left", padx=220, pady=100)
 
     canvas_circulo = Canvas(frame_botoes, width=150, height=150)
     canvas_circulo.pack(side="left")
@@ -326,7 +327,7 @@ def iniciarSegundoJogo():
     canvas_circulo.create_oval(0, 0, 100, 100, fill="red")
 
     BTNDireita = CTkButton(master=frame_botoes, text="D", width=150, height=150, fg_color='white')
-    BTNDireita.pack(side="left", padx=200, pady=10)
+    BTNDireita.pack(side="left", padx=200, pady=100)
 
     
     # Define qual botão terá a nota de 50 reais
@@ -384,7 +385,6 @@ def iniciarSegundoJogo():
                 writer = csv.writer(file)
                 writer.writerow(["Acumulado", "Acertos", "Total Esquerda", "Média de tempo"])
                 writer.writerow([pontos, acerto, Total_Esquerdas, media_tempos])
-
             return
         if tempo_decorrido < media_tempos:
             imagem_nota = nota_100_photo
@@ -392,7 +392,7 @@ def iniciarSegundoJogo():
         else:
             imagem_nota = nota_50_photo
             pontos += 50
-        canvas.create_image(305, 105, image=imagem_nota)
+        canvas.create_image(390, 170, image=imagem_nota)
         stop_timer()
         acerto += 1
         Total_Esquerdas += 1
@@ -422,8 +422,8 @@ def iniciarSegundoJogo():
         #print('errou')
         #print(f"Tempos de resposta: {tempos_resposta}")  # Imprime a lista de tempos de resposta
         media_tempos = sum(tempos_resposta) / len(tempos_resposta)
-        #print(f"Tempo decorrido: {tempo_decorrido}")
-        #print(f"Média dos tempos: {media_tempos}")
+        print(f"Tempo decorrido: {tempo_decorrido}")
+        print(f"Média dos tempos: {media_tempos}")
         if not rodadas:  # Se todas as rodadas foram concluídas
             stop_timer()
             timer_label.config(font=40,foreground='#fff', background='#000', text=f"Fim do jogo!\n Acumulado R$:{pontos}\n Acertos:{acerto}\n Total Esquerda:{Total_Esquerdas}\n Média de tempo: {media_tempos:.2f}")
@@ -443,7 +443,7 @@ def iniciarSegundoJogo():
         else:
             imagem_nota = nota_5_photo
             pontos += 5
-        canvas.create_image(305, 105, image=imagem_nota)
+        canvas.create_image(390, 170, image=imagem_nota)
         stop_timer()
         new_window.after(1000, lambda: canvas.delete("all"))
         new_window.after(1000, start_timer)
@@ -471,14 +471,17 @@ def iniciarSegundoJogo():
         nota_50.configure(command=acertou)
         nota_5.configure(command=errou)
     
-    # Cria um temporizador
+        # Cria um temporizador
     tempo_total = 5
     tempo_restante = 0
-    timer_label = Label(new_window, text=f"")
+    timer_label = Label(new_window)
     timer_label.pack()
 
     # Adicione uma barra de progresso
-    progress = ttk.Progressbar(new_window, length=100, mode='determinate', maximum=tempo_total)
+    style = ttk.Style()
+    style.configure("TProgressbar", thickness=50)
+
+    progress = ttk.Progressbar(new_window, length=300, mode='determinate', maximum=tempo_total, style="TProgressbar")
     progress.pack()
 
     # Variável de controle para pausar o temporizador
@@ -492,7 +495,7 @@ def iniciarSegundoJogo():
             progress['value'] = tempo_restante  # Atualiza a barra de progresso
             new_window.after(1000, countdown)
         elif tempo_restante >= tempo_total:
-            timer_label.config(text="O tempo acabou!")
+            timer_label.config(font=40,foreground='#fff', background='#000', text="O tempo acabou!")
             new_window.destroy()
 
     def start_timer():
@@ -503,7 +506,6 @@ def iniciarSegundoJogo():
         progress['value'] = 0  # Reinicia a barra de progresso
         pausar_temporizador = False
         countdown()
-
 
     def stop_timer():
         nonlocal pausar_temporizador
