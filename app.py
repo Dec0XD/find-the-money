@@ -165,15 +165,16 @@ def IniciarJogo():
             return
 
         button_clicked.configure(fg_color='red')  # Muda a cor para vermelho
-        canvas.create_image(390, 170, image=nota_50_photo)
+        
         stop_timer()
         pontos += 50
         acerto += 1
         Total_Esquerdas += 1
         duracao = tempo_inicio
         print(f"Pontuação: {pontos}")
+        new_window.after(500, lambda :canvas.create_image(390, 170, image=nota_50_photo))
         new_window.after(1000, lambda: canvas.delete("all"))
-        new_window.after(1000, lambda: button_clicked.configure(fg_color='SystemButtonFace'))  # Restaura a cor original
+        new_window.after(500, lambda: button_clicked.configure(fg_color='SystemButtonFace'))  # Restaura a cor original
         new_window.after(10, lambda: BTNDireita.configure(state=DISABLED))
         new_window.after(1000, lambda: BTNDireita.configure(state=NORMAL))
         new_window.after(10, lambda: BTNEsquerda.configure(state=DISABLED))
@@ -215,11 +216,11 @@ def IniciarJogo():
             return
 
         button_clicked.configure(fg_color='red')  # Muda a cor para vermelho
-        canvas.create_image(390, 170, image=nota_5_photo)
         stop_timer()
         pontos += 5
+        new_window.after(500, lambda :canvas.create_image(390, 170, image=nota_5_photo))
         new_window.after(1000, lambda: canvas.delete("all"))
-        new_window.after(1000, lambda: button_clicked.configure(fg_color='SystemButtonFace'))  # Restaura a cor original
+        new_window.after(500, lambda: button_clicked.configure(fg_color='SystemButtonFace'))  # Restaura a cor original
         new_window.after(10, lambda: BTNDireita.configure(state=DISABLED))
         new_window.after(1000, lambda: BTNDireita.configure(state=NORMAL))
         new_window.after(10, lambda: BTNEsquerda.configure(state=DISABLED))
@@ -292,7 +293,7 @@ def IniciarJogo():
 
 def iniciarSegundoJogo():
     new_window = Toplevel(app)
-    new_window.geometry("{}x{}+0+0".format(app.winfo_screenwidth(), app.winfo_screenheight()))
+    new_window.geometry("{}x{}+0+0".format(new_window.winfo_screenwidth(), new_window.winfo_screenheight()))
     new_window.configure(bg='black')
     
     #Carregando a nota de 100
@@ -412,11 +413,11 @@ def iniciarSegundoJogo():
         else:
             imagem_nota = nota_50_photo
             pontos += 50
-        canvas.create_image(390, 170, image=imagem_nota)
         stop_timer()
         acerto += 1
+        new_window.after(500, lambda :canvas.create_image(390, 170, image=imagem_nota))
         new_window.after(1000, lambda: canvas.delete("all"))
-        new_window.after(1000, lambda: button_clicked.configure(fg_color='SystemButtonFace'))  # Restaura a cor original
+        new_window.after(500, lambda: button_clicked.configure(fg_color='SystemButtonFace'))  # Restaura a cor original
         new_window.after(10, lambda: BTNDireita.configure(state=DISABLED))
         new_window.after(1000, lambda: BTNDireita.configure(state=NORMAL))
         new_window.after(10, lambda: BTNEsquerda.configure(state=DISABLED))
@@ -462,10 +463,10 @@ def iniciarSegundoJogo():
         else:
             imagem_nota = nota_5_photo
             pontos += 5
-        canvas.create_image(390, 170, image=imagem_nota)
         stop_timer()
+        new_window.after(500, lambda :canvas.create_image(390, 170, image=imagem_nota))
         new_window.after(1000, lambda: canvas.delete("all"))
-        new_window.after(1000, lambda: button_clicked.configure(fg_color='SystemButtonFace'))  # Restaura a cor original
+        new_window.after(500, lambda: button_clicked.configure(fg_color='SystemButtonFace'))  # Restaura a cor original
         new_window.after(10, lambda: BTNDireita.configure(state=DISABLED))
         new_window.after(1000, lambda: BTNDireita.configure(state=NORMAL))
         new_window.after(10, lambda: BTNEsquerda.configure(state=DISABLED))
