@@ -50,6 +50,7 @@ def IniciarJogo():
         timer_label.config(font=40,foreground='#fff', background='#000', text="")
         new_window.after(10, lambda: BTNDireita.configure(state=NORMAL))
         new_window.after(10, lambda: BTNEsquerda.configure(state=NORMAL))
+        new_window.after(10, lambda: canvas_circulo.configure(state=DISABLED))
         start_timer()
         
     new_window = Toplevel(app)
@@ -276,6 +277,7 @@ def iniciarSegundoJogo():
         timer_label.config(font=40, foreground='#fff', background='#000', text="")
         new_window.after(10, lambda: BTNDireita.configure(state=NORMAL))
         new_window.after(10, lambda: BTNEsquerda.configure(state=NORMAL))
+        new_window.after(10, lambda: canvas_circulo.configure(state=DISABLED))
         start_timer()
         
     new_window = Toplevel(app)
