@@ -357,12 +357,12 @@ def iniciarSegundoJogo():
         global tempo_inicio, pontos, acerto, duracao
         duracao = tempo_inicio
         tempo_fim = time.time()
-        tempo_decorrido = (tempo_fim - tempo_inicio)
-        tempo_inicio = time.time()
+        tempo_decorrido = (tempo_fim - tempo_inicio - 1)
+    
         tempos_resposta.append(tempo_decorrido)
 
         media_tempos = sum(tempos_resposta) / len(tempos_resposta)
-
+        print('acertou',tempo_decorrido, quantidadetempo)
         if not rodadas:
             stop_timer()
             timer_label.config(font=40, foreground='#fff', background='#000',
@@ -408,12 +408,12 @@ def iniciarSegundoJogo():
         global tempo_inicio, pontos, acerto, duracao
         duracao = tempo_inicio
         tempo_fim = time.time()
-        tempo_decorrido = (tempo_fim - tempo_inicio)
+        tempo_decorrido = (tempo_fim - tempo_inicio - 1)
         tempo_inicio = time.time()
         tempos_resposta.append(tempo_decorrido)
 
         media_tempos = sum(tempos_resposta) / len(tempos_resposta)
-
+        print('errou',tempo_decorrido, media_tempos)
         if not rodadas:
             stop_timer()
             timer_label.config(font=40, foreground='#fff', background='#000',
