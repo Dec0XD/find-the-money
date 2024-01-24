@@ -42,6 +42,16 @@ Obs: Você pode alterar esses valores escrevendo em suas respectivas caixas."""
     label.pack()
 
 def IniciarJogo():
+    global tempo_inicio
+    def mudar_cor_circulo():
+        global tempo_inicio
+        canvas_circulo.itemconfigure(circulo, fill='green')
+        tempo_inicio = time.time()
+        timer_label.config(font=40,foreground='#fff', background='#000', text="")
+        new_window.after(10, lambda: BTNDireita.configure(state=NORMAL))
+        new_window.after(10, lambda: BTNEsquerda.configure(state=NORMAL))
+        start_timer()
+        
     new_window = Toplevel(app)
     new_window.geometry("{}x{}+0+0".format(new_window.winfo_screenwidth(), new_window.winfo_screenheight()))
     new_window.configure(bg='black')
@@ -69,16 +79,19 @@ def IniciarJogo():
     frame_botoes = Frame(new_window)
     frame_botoes.configure(background='black')
     frame_botoes.pack()
-
-    BTNEsquerda = CTkButton(master=frame_botoes, text="E", width=150, height=150, fg_color='white', hover=None)
+    
+    BTNEsquerda = CTkButton(master=frame_botoes, text="E", width=150, height=150, fg_color='white', hover=None, state=DISABLED)
     BTNEsquerda.pack(side="left", padx=220, pady=100)
-
+    
     canvas_circulo = Canvas(frame_botoes, width=150, height=150)
     canvas_circulo.pack(side="left")
     canvas_circulo.configure(background='black', highlightbackground='black')
-    canvas_circulo.create_oval(0, 0, 100, 100, fill="red")
+    circulo = canvas_circulo.create_oval(0, 0, 100, 100, fill="red")
 
-    BTNDireita = CTkButton(master=frame_botoes, text="D", width=150, height=150, fg_color='white', hover=None)
+    # Define a função a ser chamada quando o círculo for clicado
+    canvas_circulo.tag_bind(circulo, '<Button-1>', lambda event: mudar_cor_circulo())
+
+    BTNDireita = CTkButton(master=frame_botoes, text="D", width=150, height=150, fg_color='white', hover=None, state=DISABLED)
     BTNDireita.pack(side="left", padx=200, pady=100)
 
     # Define qual botão terá a nota de 50 reais
@@ -102,28 +115,27 @@ def IniciarJogo():
         new_window.after(10, lambda: BTNDireita.configure(state=DISABLED))
         new_window.after(10, lambda: BTNEsquerda.configure(state=DISABLED))
         
-    global tempo_inicio, pontos, acerto, Total_Esquerdas, duracao, media_tempos
+    global pontos, acerto, Total_Esquerdas, duracao, media_tempo_jogoum
     pontos = 0 
     acerto = 0
     Total_Esquerdas = 0 
     duracao = 0
-    tempo_inicio = time.time()
         
     tempos_resposta = []
     def acertou(button_clicked):
-        global tempo_inicio, pontos, acerto, Total_Esquerdas, duracao, media_tempos
+        global tempo_inicio, pontos, acerto, Total_Esquerdas, duracao, media_tempo_jogoum
         duracao = tempo_inicio
         tempo_fim = time.time()
         tempo_decorrido = (tempo_fim - tempo_inicio)
         tempo_inicio = time.time()
         tempos_resposta.append(tempo_decorrido)
 
-        media_tempos = sum(tempos_resposta) / len(tempos_resposta)
+        media_tempo_jogoum = sum(tempos_resposta) / len(tempos_resposta)
 
         if not rodadas:
             stop_timer()
             timer_label.config(font=40, foreground='#fff', background='#000',
-                            text=f"Fim do jogo!\n Acumulado R$:{pontos}\n Acertos:{acerto}\n Total Esquerda:{Total_Esquerdas}\n Média de tempo: {media_tempos:.2f}")
+                            text=f"Fim do jogo!\n Acumulado R$:{pontos}\n Acertos:{acerto}\n Total Esquerda:{Total_Esquerdas}\n Média de tempo: {media_tempo_jogoum:.2f}")
             inciarJogoDois.configure(state=NORMAL)
             informationJogo.configure(state=NORMAL)
             FimDeJogo()
@@ -131,7 +143,7 @@ def IniciarJogo():
             with open('jogo_info.csv', 'w', newline='') as file:
                 writer = csv.writer(file)
                 writer.writerow(["Acumulado", "Acertos", "Total Esquerda", "Média de tempo"])
-                writer.writerow([pontos, acerto, Total_Esquerdas, media_tempos])
+                writer.writerow([pontos, acerto, Total_Esquerdas, media_tempo_jogoum])
 
             return
 
@@ -142,7 +154,6 @@ def IniciarJogo():
         acerto += 1
         Total_Esquerdas += 1
         duracao = tempo_inicio
-        print(f"Pontuação: {pontos}")
         new_window.after(500, lambda :canvas.create_image(390, 170, image=nota_50_photo))
         new_window.after(1000, lambda: canvas.delete("all"))
         new_window.after(500, lambda: button_clicked.configure(fg_color='SystemButtonFace'))  # Restaura a cor original
@@ -162,19 +173,19 @@ def IniciarJogo():
         nota_5.configure(command=lambda: errou(nota_5))
 
     def errou(button_clicked):
-        global tempo_inicio, pontos, acerto, Total_Esquerdas, duracao, media_tempos
+        global tempo_inicio, pontos, acerto, Total_Esquerdas, duracao, media_tempo_jogoum
         duracao = tempo_inicio
         tempo_fim = time.time()
         tempo_decorrido = (tempo_fim - tempo_inicio)
         tempo_inicio = time.time()
         tempos_resposta.append(tempo_decorrido)
 
-        media_tempos = sum(tempos_resposta) / len(tempos_resposta)
+        media_tempo_jogoum = sum(tempos_resposta) / len(tempos_resposta)
 
         if not rodadas:
             stop_timer()
             timer_label.config(font=40, foreground='#fff', background='#000',
-                            text=f"Fim do jogo!\n Acumulado R$:{pontos}\n Acertos:{acerto}\n Total Esquerda:{Total_Esquerdas}\n Média de tempo: {media_tempos:.2f}")
+                            text=f"Fim do jogo!\n Acumulado R$:{pontos}\n Acertos:{acerto}\n Total Esquerda:{Total_Esquerdas}\n Média de tempo: {media_tempo_jogoum:.2f}")
             inciarJogoDois.configure(state=NORMAL)
             informationJogo.configure(state=NORMAL)
             FimDeJogo()
@@ -182,7 +193,7 @@ def IniciarJogo():
             with open('jogo_info.csv', 'w', newline='') as file:
                 writer = csv.writer(file)
                 writer.writerow(["Acumulado", "Acertos", "Total Esquerda", "Média de tempo"])
-                writer.writerow([pontos, acerto, Total_Esquerdas, media_tempos])
+                writer.writerow([pontos, acerto, Total_Esquerdas, media_tempo_jogoum])
 
             return
 
@@ -217,18 +228,16 @@ def IniciarJogo():
         nota_50.configure(command=lambda: acertou(nota_50))
         nota_5.configure(command=lambda: errou(nota_5))
 
-
-
     # Cria um temporizador
     tempo_total = 5
     tempo_restante = 0
     timer_label = Label(new_window)
     timer_label.pack()
+    timer_label.config(font=40,foreground='#fff', background='#000', text="Clique no circulo para iniciar!")
 
     # Adicione uma barra de progresso
     style = ttk.Style()
     style.configure("TProgressbar", thickness=50)
-
     progress = ttk.Progressbar(new_window, length=300, mode='determinate', maximum=tempo_total, style="TProgressbar")
     progress.pack()
 
@@ -243,7 +252,7 @@ def IniciarJogo():
             progress['value'] = tempo_restante  # Atualiza a barra de progresso
             new_window.after(1000, countdown)
         elif tempo_restante >= tempo_total:
-            timer_label.config(font=40,foreground='#fff', background='#000', text="O tempo acabou!")
+            timer_label.config(font=40, foreground='#fff', background='#000', text="O tempo acabou!")
             new_window.destroy()
 
     def start_timer():
@@ -258,11 +267,17 @@ def IniciarJogo():
     def stop_timer():
         nonlocal pausar_temporizador
         pausar_temporizador = True
-    
-    # Inicia o temporizador
-    start_timer()
 
 def iniciarSegundoJogo():
+    def mudar_cor_circulo():
+        global tempo_inicio
+        tempo_inicio = time.time() 
+        canvas_circulo.itemconfigure(circulo, fill='green')
+        timer_label.config(font=40, foreground='#fff', background='#000', text="")
+        new_window.after(10, lambda: BTNDireita.configure(state=NORMAL))
+        new_window.after(10, lambda: BTNEsquerda.configure(state=NORMAL))
+        start_timer()
+        
     new_window = Toplevel(app)
     new_window.geometry("{}x{}+0+0".format(new_window.winfo_screenwidth(), new_window.winfo_screenheight()))
     new_window.configure(bg='black')
@@ -304,17 +319,19 @@ def iniciarSegundoJogo():
     frame_botoes.pack()
 
     # Cria botões e o círculo dentro do Frame
-    BTNEsquerda = CTkButton(master=frame_botoes, text="E", width=150, height=150, fg_color='white', hover=None)
+    BTNEsquerda = CTkButton(master=frame_botoes, text="E", width=150, height=150, fg_color='white', hover=None, state=DISABLED)
     BTNEsquerda.pack(side="left", padx=220, pady=100)
-
+    
     canvas_circulo = Canvas(frame_botoes, width=150, height=150)
     canvas_circulo.pack(side="left")
     canvas_circulo.configure(background='black', highlightbackground='black')
-    canvas_circulo.create_oval(0, 0, 100, 100, fill="red")
+    circulo = canvas_circulo.create_oval(0, 0, 100, 100, fill="red")
 
-    BTNDireita = CTkButton(master=frame_botoes, text="D", width=150, height=150, fg_color='white', hover=None)
+    # Define a função a ser chamada quando o círculo for clicado
+    canvas_circulo.tag_bind(circulo, '<Button-1>', lambda event: mudar_cor_circulo())
+
+    BTNDireita = CTkButton(master=frame_botoes, text="D", width=150, height=150, fg_color='white', hover=None, state=DISABLED)
     BTNDireita.pack(side="left", padx=200, pady=100)
-
     
     # Define qual botão terá a nota de 50 reais
     if QuantidadeNotaEsquerdaJogoDois.get() == "":
@@ -330,7 +347,7 @@ def iniciarSegundoJogo():
         total_rodadas = int(NumeroRodadasJogoDois.get())
     
     if mediajogo.get() == "" or mediajogo.get() == "0":
-        quantidadetempo = media_tempos
+        quantidadetempo = media_tempo_jogoum
     else:
         quantidadetempo = float(mediajogo.get())
         
@@ -345,20 +362,18 @@ def iniciarSegundoJogo():
         new_window.after(10, lambda: BTNDireita.configure(state=DISABLED))
         new_window.after(10, lambda: BTNEsquerda.configure(state=DISABLED))
         
-    global tempo_inicio, pontos, acerto, Total_Esquerdas, duracao
+    global tempo_inicio, pontos, acerto, Total_Esquerdas
     pontos = 0 
     acerto = 0
     Total_Esquerdas = 0 
-    duracao = 0
-    tempo_inicio = time.time()
+    
         
     tempos_resposta = []
     def acertou(button_clicked):
-        global tempo_inicio, pontos, acerto, duracao
-        duracao = tempo_inicio
+        global tempo_inicio, pontos, acerto
         tempo_fim = time.time()
-        tempo_decorrido = (tempo_fim - tempo_inicio - 1)
-    
+        tempo_decorrido = tempo_fim - tempo_inicio
+        tempo_inicio = time.time()
         tempos_resposta.append(tempo_decorrido)
 
         media_tempos = sum(tempos_resposta) / len(tempos_resposta)
@@ -367,7 +382,6 @@ def iniciarSegundoJogo():
             stop_timer()
             timer_label.config(font=40, foreground='#fff', background='#000',
                             text=f"Fim do jogo!\n Acumulado R$:{pontos}\n Acertos:{acerto}\n Média de tempo: {media_tempos:.2f}")
-            inciarJogoDois.configure(state=NORMAL)
             FimDeJogo()
 
             with open('jogo_info_Fase2.csv', 'w', newline='') as file:
@@ -378,13 +392,13 @@ def iniciarSegundoJogo():
             return
 
         button_clicked.configure(fg_color='red')  # Muda a cor para vermelho
+        stop_timer()
         if tempo_decorrido < quantidadetempo:
             imagem_nota = nota_100_photo
             pontos += 100
         else:
             imagem_nota = nota_50_photo
             pontos += 50
-        stop_timer()
         acerto += 1
         new_window.after(500, lambda :canvas.create_image(390, 170, image=imagem_nota))
         new_window.after(1000, lambda: canvas.delete("all"))
@@ -406,14 +420,13 @@ def iniciarSegundoJogo():
 
     def errou(button_clicked):
         global tempo_inicio, pontos, acerto, duracao
-        duracao = tempo_inicio
         tempo_fim = time.time()
-        tempo_decorrido = (tempo_fim - tempo_inicio - 1)
+        tempo_decorrido = tempo_fim - tempo_inicio
         tempo_inicio = time.time()
         tempos_resposta.append(tempo_decorrido)
 
         media_tempos = sum(tempos_resposta) / len(tempos_resposta)
-        print('errou',tempo_decorrido, media_tempos)
+        print('errou',tempo_decorrido, quantidadetempo)
         if not rodadas:
             stop_timer()
             timer_label.config(font=40, foreground='#fff', background='#000',
@@ -429,13 +442,13 @@ def iniciarSegundoJogo():
             return
 
         button_clicked.configure(fg_color='red')  # Muda a cor para vermelho
+        stop_timer()
         if tempo_decorrido < quantidadetempo:
             imagem_nota = nota_10_photo
             pontos += 10
         else:
             imagem_nota = nota_5_photo
             pontos += 5
-        stop_timer()
         new_window.after(500, lambda :canvas.create_image(390, 170, image=imagem_nota))
         new_window.after(1000, lambda: canvas.delete("all"))
         new_window.after(500, lambda: button_clicked.configure(fg_color='SystemButtonFace'))  # Restaura a cor original
@@ -464,12 +477,12 @@ def iniciarSegundoJogo():
         nota_50.configure(command=lambda: acertou(nota_50))
         nota_5.configure(command=lambda: errou(nota_5))
 
-    
         # Cria um temporizador
     tempo_total = 5
     tempo_restante = 0
     timer_label = Label(new_window)
     timer_label.pack()
+    timer_label.config(font=40,foreground='#fff', background='#000', text="Clique no circulo para iniciar!")
 
     # Adicione uma barra de progresso
     style = ttk.Style()
@@ -505,8 +518,6 @@ def iniciarSegundoJogo():
         nonlocal pausar_temporizador
         pausar_temporizador = True
     
-    # Inicia o temporizador
-    start_timer()
 
 def InfosJogo():
     InfosJogo = Toplevel()
@@ -524,7 +535,7 @@ receberá será de 100! O mesmo acontece para a nota de 5, que se
 transformará em 10!
 No primeiro jogo, os resultados foram os seguintes: 
 - Tempo médio da população: 1.3 s
-- Seu tempo: {media_tempos:.2f}
+- Seu tempo: {media_tempo_jogoum:.2f}
 
 Nesse caso, você tem que apertar o botão em menos de 1.3 segundos 
 para ganhar o valor dobrado!
