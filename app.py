@@ -15,7 +15,7 @@ set_appearance_mode("dark")
 
 def MostrarInformaçao():
     MostrarInformaçao = Toplevel()
-    MostrarInformaçao.geometry("600x300")  # Ajuste para o tamanho desejado
+    MostrarInformaçao.geometry("600x300")
     MostrarInformaçao.configure(bg='black')
     message = """
 Bem vindo! Vamos dar início ao jogo.\n
@@ -29,7 +29,7 @@ Para jogar é bem simples:\n
 
 def instruçoes3():
     instruçoes3 = Toplevel()
-    instruçoes3.geometry("600x300")  # Ajuste para o tamanho desejado
+    instruçoes3.geometry("600x300")
     instruçoes3.configure(bg='black')
     message = """O jogo tem um formato padrão:
 Nas duas fases a porcentagem das notas aparecerem do lado esquerdo é de 50%.
@@ -270,6 +270,8 @@ def IniciarJogo():
         pausar_temporizador = True
 
 def iniciarSegundoJogo():
+    MostrarInformaçao()
+    instruçoes3()
     def mudar_cor_circulo():
         global tempo_inicio
         tempo_inicio = time.time() 
