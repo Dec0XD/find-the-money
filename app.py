@@ -15,22 +15,26 @@ set_appearance_mode("dark")
 
 def MostrarInformaçao():
     MostrarInformaçao = Toplevel()
-    MostrarInformaçao.geometry("600x300")
     MostrarInformaçao.configure(bg='black')
     message = """
 Bem vindo! Vamos dar início ao jogo.\n
 Para jogar é bem simples:\n
 1. Escolha um dos botões, ou da esquerda ou da direita, \ne tente encontrar a nota de 50 reais.
-2. No início de cada rodada posicione o mouse no círculo vermelho.
+2. Clique no círculo vermelho para iniciar cada rodada(Você tem 2 Segundos!).
 3. Cuidado! Se demorar muito para escolher, voltará para o início do jogo."""
     label = Label(MostrarInformaçao, text=message)
     label.config(font=16, foreground='#fff', background='#000')
     label.pack()
-
+    
+    # Calcula a largura e a altura da janela com base no tamanho do texto
+    largura = label.winfo_reqwidth() + 20
+    altura = label.winfo_reqheight() + 20
+    MostrarInformaçao.geometry("{}x{}+{}+{}".format(largura, altura, 0, 0))
+    
 def instruçoes3():
     instruçoes3 = Toplevel()
-    instruçoes3.geometry("600x300")
     instruçoes3.configure(bg='black')
+    
     message = """O jogo tem um formato padrão:
 Nas duas fases a porcentagem das notas aparecerem do lado esquerdo é de 50%.
 Na primeira fase o número de rodadas é 10.
@@ -40,9 +44,16 @@ Obs: Você pode alterar esses valores escrevendo em suas respectivas caixas."""
     label = Label(instruçoes3, text=message)
     label.config(font=16, foreground='#fff', background='#000')
     label.pack()
+    
+    largura = label.winfo_reqwidth() + 20
+    altura = label.winfo_reqheight() + 20
+    instruçoes3.geometry("{}x{}+{}+{}".format(largura, altura, 0, 0))
 
 def IniciarJogo():
+    MostrarInformaçao()
     global tempo_inicio
+    # Variável de controle para o estado do botão
+    botao_vermelho_clicado = False
     def mudar_cor_circulo():
         global tempo_inicio
         canvas_circulo.itemconfigure(circulo, fill='green')
@@ -134,9 +145,12 @@ def IniciarJogo():
         media_tempo_jogoum = sum(tempos_resposta) / len(tempos_resposta)
 
         if not rodadas:
+                    # Calcula a porcentagem de acerto
+            percentual_acerto = (acerto / total_rodadas) * 100
+
             stop_timer()
             timer_label.config(font=40, foreground='#fff', background='#000',
-                            text=f"Fim do jogo!\n Acumulado R$:{pontos}\n Acertos:{acerto}\n Total Esquerda:{Total_Esquerdas}\n Média de tempo: {media_tempo_jogoum:.2f}")
+                            text=f"Fim do jogo!\nAcumulado R$:{pontos}\nAcertos:{acerto}/{total_rodadas} - {percentual_acerto:.2f}%\nTotal Esquerda:{Total_Esquerdas}\nMédia de tempo: {media_tempo_jogoum:.2f}")
             inciarJogoDois.configure(state=NORMAL)
             informationJogo.configure(state=NORMAL)
             FimDeJogo()
@@ -184,9 +198,12 @@ def IniciarJogo():
         media_tempo_jogoum = sum(tempos_resposta) / len(tempos_resposta)
 
         if not rodadas:
+            # Calcula a porcentagem de acerto
+            percentual_acerto = (acerto / total_rodadas) * 100
+
             stop_timer()
             timer_label.config(font=40, foreground='#fff', background='#000',
-                            text=f"Fim do jogo!\n Acumulado R$:{pontos}\n Acertos:{acerto}\n Total Esquerda:{Total_Esquerdas}\n Média de tempo: {media_tempo_jogoum:.2f}")
+                            text=f"Fim do jogo!\nAcumulado R$:{pontos}\nAcertos:{acerto}/{total_rodadas} - {percentual_acerto:.2f}%\nTotal Esquerda:{Total_Esquerdas}\nMédia de tempo: {media_tempo_jogoum:.2f}")
             inciarJogoDois.configure(state=NORMAL)
             informationJogo.configure(state=NORMAL)
             FimDeJogo()
@@ -270,8 +287,7 @@ def IniciarJogo():
         pausar_temporizador = True
 
 def iniciarSegundoJogo():
-    MostrarInformaçao()
-    instruçoes3()
+    global quantidadetempo
     def mudar_cor_circulo():
         global tempo_inicio
         tempo_inicio = time.time() 
@@ -351,21 +367,19 @@ def iniciarSegundoJogo():
         total_rodadas = int(NumeroRodadasJogoDois.get())
     
     if mediajogo.get() == "" or mediajogo.get() == "0":
-        quantidadetempo = media_tempo_jogoum
+        quantidadetempo = 1.3
     else:
         quantidadetempo = float(mediajogo.get())
-        
+    
+    InfosJogo()
     rodadas_esquerdaJogoDois = round(total_rodadas * percentual_esquerdaJogoDois)
     rodadas = ["esquerda"] * rodadas_esquerdaJogoDois + ["direita"] * (total_rodadas - rodadas_esquerdaJogoDois)
     random.shuffle(rodadas)
     
-    if rodadas == total_rodadas:
-        new_window.destroy()
-    
     def FimDeJogo():
         new_window.after(10, lambda: BTNDireita.configure(state=DISABLED))
         new_window.after(10, lambda: BTNEsquerda.configure(state=DISABLED))
-        
+    
     global tempo_inicio, pontos, acerto, Total_Esquerdas
     pontos = 0 
     acerto = 0
@@ -374,7 +388,7 @@ def iniciarSegundoJogo():
         
     tempos_resposta = []
     def acertou(button_clicked):
-        global tempo_inicio, pontos, acerto
+        global tempo_inicio, pontos, acerto, quantidadetempo
         tempo_fim = time.time()
         tempo_decorrido = tempo_fim - tempo_inicio
         tempo_inicio = time.time()
@@ -383,9 +397,12 @@ def iniciarSegundoJogo():
         media_tempos = sum(tempos_resposta) / len(tempos_resposta)
         print('acertou',tempo_decorrido, quantidadetempo)
         if not rodadas:
+            # Calcula a porcentagem de acerto
+            percentual_acerto = (acerto / total_rodadas) * 100
+
             stop_timer()
             timer_label.config(font=40, foreground='#fff', background='#000',
-                            text=f"Fim do jogo!\n Acumulado R$:{pontos}\n Acertos:{acerto}\n Média de tempo: {media_tempos:.2f}")
+                            text=f"Fim do jogo!\nAcumulado R$:{pontos}\nAcertos:{acerto}/{total_rodadas} - {percentual_acerto:.2f}%\nTotal Esquerda:{Total_Esquerdas}\nMédia de tempo: {media_tempo_jogoum:.2f}")
             FimDeJogo()
 
             with open('jogo_info_Fase2.csv', 'w', newline='') as file:
@@ -423,7 +440,7 @@ def iniciarSegundoJogo():
         nota_5.configure(command=lambda: errou(nota_5))
 
     def errou(button_clicked):
-        global tempo_inicio, pontos, acerto, duracao
+        global tempo_inicio, pontos, acerto, duracao, quantidadetempo
         tempo_fim = time.time()
         tempo_decorrido = tempo_fim - tempo_inicio
         tempo_inicio = time.time()
@@ -432,9 +449,12 @@ def iniciarSegundoJogo():
         media_tempos = sum(tempos_resposta) / len(tempos_resposta)
         print('errou',tempo_decorrido, quantidadetempo)
         if not rodadas:
+            # Calcula a porcentagem de acerto
+            percentual_acerto = (acerto / total_rodadas) * 100
+
             stop_timer()
             timer_label.config(font=40, foreground='#fff', background='#000',
-                            text=f"Fim do jogo!\n Acumulado R$:{pontos}\n Acertos:{acerto}\n Média de tempo: {media_tempos:.2f}")
+                            text=f"Fim do jogo!\nAcumulado R$:{pontos}\nAcertos:{acerto}/{total_rodadas} - {percentual_acerto:.2f}%\nTotal Esquerda:{Total_Esquerdas}\nMédia de tempo: {media_tempo_jogoum:.2f}")
             inciarJogoDois.configure(state=NORMAL)
             FimDeJogo()
 
@@ -522,11 +542,12 @@ def iniciarSegundoJogo():
         nonlocal pausar_temporizador
         pausar_temporizador = True
     
-
+global quantidadetempo
+quantidadetempo = 1.3
 def InfosJogo():
     InfosJogo = Toplevel()
-    InfosJogo.geometry("600x400")  # Ajuste para o tamanho desejado
     InfosJogo.configure(bg='black')
+    global quantidadetempo
     message = f"""
 No segundo jogo, o tempo será seu maior aliado (ou não)! 
 Se você conseguir um tempo menor do que a média das outras pessoas 
@@ -538,16 +559,20 @@ você acertar o lugar da nota de 50, a nota e a pontuação que você
 receberá será de 100! O mesmo acontece para a nota de 5, que se 
 transformará em 10!
 No primeiro jogo, os resultados foram os seguintes: 
-- Tempo médio da população: 1.3 s
+- Tempo médio da população: {quantidadetempo:.2f} s
 - Seu tempo: {media_tempo_jogoum:.2f}
 
 Nesse caso, você tem que apertar o botão em menos de 1.3 segundos 
 para ganhar o valor dobrado!
-
     """
     label_text = Label(InfosJogo, text=message)
     label_text.config(font=16, foreground='#fff', background='#000')
     label_text.pack()
+    
+    largura = label_text.winfo_reqwidth() + 20
+    altura = label_text.winfo_reqheight() + 20
+    InfosJogo.geometry("{}x{}+{}+{}".format(largura, altura, 0, 0))
+    
 def validate_input(event):
     # Verifica se o valor inserido é um dígito, a tecla backspace ou o ponto
     if not (event.char.isdigit() or event.char == "." or event.keysym == "BackSpace"):
