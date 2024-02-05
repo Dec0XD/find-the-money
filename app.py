@@ -55,22 +55,6 @@ def IniciarJogo():
     botoes_desativados = False
 
     def mudar_cor_circulo():
-        def restaurar_botoes():
-            nonlocal botao_vermelho_clicado, botoes_desativados
-            if not botao_vermelho_clicado:
-                canvas_circulo.itemconfigure(circulo, fill='red')
-                botoes_desativados = False
-                BTNDireita.configure(state=DISABLED)
-                BTNEsquerda.configure(state=DISABLED)
-
-        def verificar_tempo_excedido():
-            global tempo_inicio
-            nonlocal botao_vermelho_clicado, botoes_desativados
-            if not botao_vermelho_clicado and botoes_desativados and (time.time() - tempo_inicio) > 2:
-                botao_vermelho_clicado = True
-                restaurar_botoes() 
-                FimDeJogo()
-        
         global tempo_inicio
         nonlocal botao_vermelho_clicado, botoes_desativados
         canvas_circulo.itemconfigure(circulo, fill='green')
@@ -79,21 +63,17 @@ def IniciarJogo():
         botoes_desativados = True
         BTNDireita.configure(state=NORMAL)
         BTNEsquerda.configure(state=NORMAL)
-        new_window.after(1000, restaurar_botoes)
-        new_window.after(1000, lambda: canvas_circulo.itemconfigure(circulo, fill='red'))
-        new_window.after(1000, verificar_tempo_excedido)
         start_timer()
 
-
-
-    def click_circulo(event):
+    def restaurar_botoes():
         nonlocal botao_vermelho_clicado, botoes_desativados
-        if not botoes_desativados:
-            botao_vermelho_clicado = True
-            mudar_cor_circulo()
-        
-
-
+        if not botao_vermelho_clicado:
+            canvas_circulo.itemconfigure(circulo, fill='red')
+            botoes_desativados = False
+            BTNDireita.configure(state=DISABLED)
+            BTNEsquerda.configure(state=DISABLED)
+            
+            
     new_window = Toplevel(app)
     new_window.geometry("{}x{}+0+0".format(new_window.winfo_screenwidth(), new_window.winfo_screenheight()))
     new_window.configure(bg='black')
@@ -157,9 +137,9 @@ def IniciarJogo():
     acerto = 0
     Total_Esquerdas = 0 
     duracao = 0
-    percentual_acerto = (acerto / total_rodadas) * 100
     
     def FimDeJogo():
+        percentual_acerto = (acerto / total_rodadas) * 100
         timer_label.config(font=40, foreground='#fff', background='#000',
                             text=f"Fim do jogo!\nAcumulado R$:{pontos}\nAcertos:{acerto}/{total_rodadas} - {percentual_acerto:.2f}%\nTotal Esquerda:{Total_Esquerdas}\nMédia de tempo: {media_tempo_jogoum:.2f}")
         new_window.after(10, lambda: BTNDireita.configure(state=DISABLED))
@@ -167,6 +147,7 @@ def IniciarJogo():
            
     tempos_resposta = []
     def acertou(button_clicked):
+        restaurar_botoes()
         global tempo_inicio, pontos, acerto, Total_Esquerdas, duracao, media_tempo_jogoum
         duracao = tempo_inicio
         tempo_fim = time.time()
@@ -214,6 +195,7 @@ def IniciarJogo():
         nota_5.configure(command=lambda: errou(nota_5))
 
     def errou(button_clicked):
+        restaurar_botoes()
         global tempo_inicio, pontos, acerto, Total_Esquerdas, duracao, media_tempo_jogoum
         duracao = tempo_inicio
         tempo_fim = time.time()
@@ -290,8 +272,9 @@ def IniciarJogo():
             progress['value'] = tempo_restante  # Atualiza a barra de progresso
             new_window.after(1000, countdown)
         elif tempo_restante >= tempo_total:
-            timer_label.config(font=40, foreground='#fff', background='#000', text="O tempo acabou!")
-            new_window.destroy()
+            timer_label.config(font=40, foreground='#fff', background='#000', text="")
+            canvas_circulo.configure(state=DISABLED)
+            FimDeJogo()
 
     def start_timer():
         if not rodadas:  # Se todas as rodadas foram concluídas
@@ -547,7 +530,6 @@ def iniciarSegundoJogo():
             new_window.after(1000, countdown)
         elif tempo_restante >= tempo_total:
             timer_label.config(font=40,foreground='#fff', background='#000', text="O tempo acabou!")
-            new_window.destroy()
 
     def start_timer():
         if not rodadas:  # Se todas as rodadas foram concluídas
