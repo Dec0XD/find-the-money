@@ -562,7 +562,7 @@ No primeiro jogo, os resultados foram os seguintes:
 - Tempo médio da população: {quantidadetempo:.2f} s
 - Seu tempo: {media_tempo_jogoum:.2f}
 
-Nesse caso, você tem que apertar o botão em menos de 1.3 segundos 
+Nesse caso, você tem que apertar o botão em menos de {quantidadetempo:.2f} segundos 
 para ganhar o valor dobrado!
     """
     label_text = Label(InfosJogo, text=message)
