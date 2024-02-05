@@ -2,6 +2,7 @@ from customtkinter import *
 from CTkMessagebox import CTkMessagebox
 from PIL import Image, ImageTk
 from tkinter import Toplevel, Label, Canvas, ttk, Frame
+import threading
 import random
 import time
 import os
@@ -50,38 +51,38 @@ Obs: Você pode alterar esses valores escrevendo em suas respectivas caixas."""
     instruçoes3.geometry("{}x{}+{}+{}".format(largura, altura, 0, 0))
 
 def IniciarJogo():
-    global tempo_inicio, tempo_total
+    MostrarInformaçao()
+    global tempo_inicio, tempo_total, tempo_verde, tempo_vermelho
     botao_vermelho_clicado = False
     botoes_desativados = False
-    tempo_inicio = time.time()
-    
+    tempo_verde = 5
+    tempo_vermelho = 2
+    lock = threading.Lock()
+
     def mudar_cor_circulo():
-        global tempo_total
-        nonlocal botao_vermelho_clicado, botoes_desativados
+        global tempo_inicio, tempo_total, tempo_verde, tempo_vermelho
+        tempo_inicio = time.time()
         canvas_circulo.itemconfigure(circulo, fill='green')
-        timer_label.config(font=40, foreground='#fff', background='#000', text="")
-        botoes_desativados = False
         BTNDireita.configure(state=NORMAL)
         BTNEsquerda.configure(state=NORMAL)
-        tempo_total = 5
+        tempo_total = tempo_verde  # Definindo o tempo total para 5 segundos (botão verde)
         start_timer()
 
     def restaurar_botoes():
-        global tempo_total
-        nonlocal botao_vermelho_clicado, botoes_desativados
-        if not botao_vermelho_clicado:
-            canvas_circulo.itemconfigure(circulo, fill='red')
-            tempo_total = 2
-            botoes_desativados = True
-            BTNDireita.configure(state=DISABLED)
-            BTNEsquerda.configure(state=DISABLED)
+        global tempo_total, tempo_vermelho
+        canvas_circulo.itemconfigure(circulo, fill='red')
+        tempo_total = tempo_vermelho  # Definindo o tempo total para 2 segundos (botão vermelho)
+        botoes_desativados = True
+        BTNDireita.configure(state=DISABLED)
+        BTNEsquerda.configure(state=DISABLED)
+        start_timer()
              
     def verificar_tempo_excedido():
         global tempo_inicio
         nonlocal botao_vermelho_clicado, botoes_desativados
-        if botoes_desativados and time.time() - tempo_inicio > 2:
+        if botoes_desativados and time.time() - tempo_inicio > tempo_total:
             restaurar_botoes()
-            FimDeJogo()          
+            FimDeJogo()
             
     new_window = Toplevel(app)
     new_window.geometry("{}x{}+0+0".format(new_window.winfo_screenwidth(), new_window.winfo_screenheight()))
@@ -159,7 +160,8 @@ def IniciarJogo():
         tempos_resposta.append(tempo_decorrido)
 
         media_tempo_jogoum = sum(tempos_resposta) / len(tempos_resposta)
-        if not rodadas:        
+
+        if not rodadas or time.time() - tempo_inicio > tempo_total:
             stop_timer()
             inciarJogoDois.configure(state=NORMAL)
             informationJogo.configure(state=NORMAL)
@@ -203,7 +205,8 @@ def IniciarJogo():
         tempos_resposta.append(tempo_decorrido)
 
         media_tempo_jogoum = sum(tempos_resposta) / len(tempos_resposta)
-        if not rodadas:
+
+        if not rodadas or time.time() - tempo_inicio > tempo_total:
             stop_timer()
             inciarJogoDois.configure(state=NORMAL)
             informationJogo.configure(state=NORMAL)
@@ -258,26 +261,26 @@ def IniciarJogo():
     timer_label.pack()
     timer_label.config(font=40,foreground='#fff', background='#000', text="Clique no circulo para iniciar!")
 
-    # Adicione uma barra de progresso
     style = ttk.Style()
     style.configure("TProgressbar", thickness=50)
     progress = ttk.Progressbar(new_window, length=300, mode='determinate', maximum=tempo_total, style="TProgressbar")
     progress.pack()
-
+    
     # Variável de controle para pausar o temporizador
     pausar_temporizador = False
 
     def countdown():
         nonlocal tempo_restante
-        if tempo_restante < tempo_total and not pausar_temporizador:
-            tempo_restante += 0.5
-            timer_label.configure(background='black')
-            progress['value'] = tempo_restante  # Atualiza a barra de progresso
-            new_window.after(500, countdown)
-        elif tempo_restante >= tempo_total:
-            timer_label.config(font=40, foreground='#fff', background='#000', text="")
-            canvas_circulo.configure(state=DISABLED)
-            verificar_tempo_excedido()
+        with lock:
+            if tempo_restante < tempo_total and not pausar_temporizador:
+                tempo_restante += 0.1  # Reduzi a incrementação para 0.1 segundos para maior precisão
+                timer_label.configure(background='black')
+                progress['value'] = tempo_restante  # Atualiza a barra de progresso
+                new_window.after(100, countdown)
+            elif tempo_restante >= tempo_total:
+                timer_label.config(font=40, foreground='#fff', background='#000', text="Acabou o Tempo!")
+                canvas_circulo.configure(state=DISABLED)
+                verificar_tempo_excedido()
 
     def start_timer():
         if not rodadas:  # Se todas as rodadas foram concluídas
@@ -293,38 +296,38 @@ def IniciarJogo():
         pausar_temporizador = True
 
 def iniciarSegundoJogo():
-    global tempo_inicio, tempo_total, quantidadetempo
+    InfosJogo()
+    global tempo_inicio, tempo_total, tempo_verde, tempo_vermelho
     botao_vermelho_clicado = False
     botoes_desativados = False
-    tempo_inicio = time.time()
-    
+    tempo_verde = 5
+    tempo_vermelho = 2
+    lock = threading.Lock()
+
     def mudar_cor_circulo():
-        global tempo_total
-        nonlocal botao_vermelho_clicado, botoes_desativados
+        global tempo_inicio, tempo_total, tempo_verde, tempo_vermelho
+        tempo_inicio = time.time()
         canvas_circulo.itemconfigure(circulo, fill='green')
-        timer_label.config(font=40, foreground='#fff', background='#000', text="")
-        botoes_desativados = False
         BTNDireita.configure(state=NORMAL)
         BTNEsquerda.configure(state=NORMAL)
-        tempo_total = 5
+        tempo_total = tempo_verde  # Definindo o tempo total para 5 segundos (botão verde)
         start_timer()
 
     def restaurar_botoes():
-        global tempo_total
-        nonlocal botao_vermelho_clicado, botoes_desativados
-        if not botao_vermelho_clicado:
-            canvas_circulo.itemconfigure(circulo, fill='red')
-            tempo_total = 2
-            botoes_desativados = True
-            BTNDireita.configure(state=DISABLED)
-            BTNEsquerda.configure(state=DISABLED)
+        global tempo_total, tempo_vermelho
+        canvas_circulo.itemconfigure(circulo, fill='red')
+        tempo_total = tempo_vermelho  # Definindo o tempo total para 2 segundos (botão vermelho)
+        botoes_desativados = True
+        BTNDireita.configure(state=DISABLED)
+        BTNEsquerda.configure(state=DISABLED)
+        start_timer()
              
     def verificar_tempo_excedido():
         global tempo_inicio
         nonlocal botao_vermelho_clicado, botoes_desativados
-        if botoes_desativados and time.time() - tempo_inicio > 2:
+        if botoes_desativados and time.time() - tempo_inicio > tempo_total:
             restaurar_botoes()
-            FimDeJogo()  
+            FimDeJogo()
         
     new_window = Toplevel(app)
     new_window.geometry("{}x{}+0+0".format(new_window.winfo_screenwidth(), new_window.winfo_screenheight()))
@@ -399,7 +402,6 @@ def iniciarSegundoJogo():
     else:
         quantidadetempo = float(mediajogo.get())
     
-    InfosJogo()
     rodadas_esquerdaJogoDois = round(total_rodadas * percentual_esquerdaJogoDois)
     rodadas = ["esquerda"] * rodadas_esquerdaJogoDois + ["direita"] * (total_rodadas - rodadas_esquerdaJogoDois)
     random.shuffle(rodadas)
@@ -538,15 +540,16 @@ def iniciarSegundoJogo():
 
     def countdown():
         nonlocal tempo_restante
-        if tempo_restante < tempo_total and not pausar_temporizador:
-            tempo_restante += 0.5
-            timer_label.configure(background='black')
-            progress['value'] = tempo_restante  # Atualiza a barra de progresso
-            new_window.after(500, countdown)
-        elif tempo_restante >= tempo_total:
-            timer_label.config(font=40, foreground='#fff', background='#000', text="")
-            canvas_circulo.configure(state=DISABLED)
-            verificar_tempo_excedido()
+        with lock:
+            if tempo_restante < tempo_total and not pausar_temporizador:
+                tempo_restante += 0.1  # Reduzi a incrementação para 0.1 segundos para maior precisão
+                timer_label.configure(background='black')
+                progress['value'] = tempo_restante  # Atualiza a barra de progresso
+                new_window.after(100, countdown)
+            elif tempo_restante >= tempo_total:
+                timer_label.config(font=40, foreground='#fff', background='#000', text="Acabou o Tempo!")
+                canvas_circulo.configure(state=DISABLED)
+                verificar_tempo_excedido()
 
     def start_timer():
         if not rodadas:  # Se todas as rodadas foram concluídas
