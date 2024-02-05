@@ -50,60 +50,89 @@ Obs: Você pode alterar esses valores escrevendo em suas respectivas caixas."""
     instruçoes3.geometry("{}x{}+{}+{}".format(largura, altura, 0, 0))
 
 def IniciarJogo():
-    MostrarInformaçao()
     global tempo_inicio
-    # Variável de controle para o estado do botão
     botao_vermelho_clicado = False
+    botoes_desativados = False
+
     def mudar_cor_circulo():
+        def restaurar_botoes():
+            nonlocal botao_vermelho_clicado, botoes_desativados
+            if not botao_vermelho_clicado:
+                canvas_circulo.itemconfigure(circulo, fill='red')
+                botoes_desativados = False
+                BTNDireita.configure(state=DISABLED)
+                BTNEsquerda.configure(state=DISABLED)
+
+        def verificar_tempo_excedido():
+            global tempo_inicio
+            nonlocal botao_vermelho_clicado, botoes_desativados
+            if not botao_vermelho_clicado and botoes_desativados and (time.time() - tempo_inicio) > 2:
+                botao_vermelho_clicado = True
+                restaurar_botoes() 
+                FimDeJogo()
+        
         global tempo_inicio
+        nonlocal botao_vermelho_clicado, botoes_desativados
         canvas_circulo.itemconfigure(circulo, fill='green')
         tempo_inicio = time.time()
-        timer_label.config(font=40,foreground='#fff', background='#000', text="")
-        new_window.after(10, lambda: BTNDireita.configure(state=NORMAL))
-        new_window.after(10, lambda: BTNEsquerda.configure(state=NORMAL))
-        new_window.after(10, lambda: canvas_circulo.configure(state=DISABLED))
+        timer_label.config(font=40, foreground='#fff', background='#000', text="")
+        botoes_desativados = True
+        BTNDireita.configure(state=NORMAL)
+        BTNEsquerda.configure(state=NORMAL)
+        new_window.after(1000, restaurar_botoes)
+        new_window.after(1000, lambda: canvas_circulo.itemconfigure(circulo, fill='red'))
+        new_window.after(1000, verificar_tempo_excedido)
         start_timer()
+
+
+
+    def click_circulo(event):
+        nonlocal botao_vermelho_clicado, botoes_desativados
+        if not botoes_desativados:
+            botao_vermelho_clicado = True
+            mudar_cor_circulo()
         
+
+
     new_window = Toplevel(app)
     new_window.geometry("{}x{}+0+0".format(new_window.winfo_screenwidth(), new_window.winfo_screenheight()))
     new_window.configure(bg='black')
-    
-    #Carregando a nota de 50
+
     nota_50_path = os.path.dirname(os.path.abspath(__file__))
     image_50_path = os.path.join(nota_50_path, 'assets/50.jpg')
     nota_50_img = Image.open(image_50_path)
-    #Carregando a nota de 2
+
     nota_5_path = os.path.dirname(os.path.abspath(__file__))
     image_5_path = os.path.join(nota_5_path, 'assets/5.jpg')
     nota_5_img = Image.open(image_5_path)
-    
+
     nota_50_img = nota_50_img.resize((610, 200))
     nota_5_img = nota_5_img.resize((610, 200))
-        
+
     nota_50_photo = ImageTk.PhotoImage(nota_50_img)
     nota_5_photo = ImageTk.PhotoImage(nota_5_img)
 
     canvas = Canvas(new_window, width=720, height=310)
     canvas.configure(background='black', highlightbackground='black')
     canvas.pack()
-    
-    # Cria um Frame para agrupar os botões e o círculo
+
     frame_botoes = Frame(new_window)
     frame_botoes.configure(background='black')
     frame_botoes.pack()
-    
-    BTNEsquerda = CTkButton(master=frame_botoes, text="E", width=150, height=150, fg_color='white', hover=None, state=DISABLED)
+
+    BTNEsquerda = CTkButton(master=frame_botoes, text="E", width=150, height=150, fg_color='white', hover=None,
+                            state=DISABLED)
     BTNEsquerda.pack(side="left", padx=220, pady=100)
-    
+
     canvas_circulo = Canvas(frame_botoes, width=150, height=150)
     canvas_circulo.pack(side="left")
     canvas_circulo.configure(background='black', highlightbackground='black')
     circulo = canvas_circulo.create_oval(0, 0, 100, 100, fill="red")
 
-    # Define a função a ser chamada quando o círculo for clicado
     canvas_circulo.tag_bind(circulo, '<Button-1>', lambda event: mudar_cor_circulo())
 
-    BTNDireita = CTkButton(master=frame_botoes, text="D", width=150, height=150, fg_color='white', hover=None, state=DISABLED)
+    BTNDireita = CTkButton(master=frame_botoes, text="D", width=150, height=150, fg_color='white', hover=None,
+                           state=DISABLED)
     BTNDireita.pack(side="left", padx=200, pady=100)
 
     # Define qual botão terá a nota de 50 reais
@@ -123,16 +152,19 @@ def IniciarJogo():
     rodadas = ["esquerda"] * rodadas_esquerda + ["direita"] * (total_rodadas - rodadas_esquerda)
     random.shuffle(rodadas)
     
-    def FimDeJogo():
-        new_window.after(10, lambda: BTNDireita.configure(state=DISABLED))
-        new_window.after(10, lambda: BTNEsquerda.configure(state=DISABLED))
-        
     global pontos, acerto, Total_Esquerdas, duracao, media_tempo_jogoum
     pontos = 0 
     acerto = 0
     Total_Esquerdas = 0 
     duracao = 0
-        
+    percentual_acerto = (acerto / total_rodadas) * 100
+    
+    def FimDeJogo():
+        timer_label.config(font=40, foreground='#fff', background='#000',
+                            text=f"Fim do jogo!\nAcumulado R$:{pontos}\nAcertos:{acerto}/{total_rodadas} - {percentual_acerto:.2f}%\nTotal Esquerda:{Total_Esquerdas}\nMédia de tempo: {media_tempo_jogoum:.2f}")
+        new_window.after(10, lambda: BTNDireita.configure(state=DISABLED))
+        new_window.after(10, lambda: BTNEsquerda.configure(state=DISABLED))
+           
     tempos_resposta = []
     def acertou(button_clicked):
         global tempo_inicio, pontos, acerto, Total_Esquerdas, duracao, media_tempo_jogoum
@@ -149,8 +181,6 @@ def IniciarJogo():
             percentual_acerto = (acerto / total_rodadas) * 100
 
             stop_timer()
-            timer_label.config(font=40, foreground='#fff', background='#000',
-                            text=f"Fim do jogo!\nAcumulado R$:{pontos}\nAcertos:{acerto}/{total_rodadas} - {percentual_acerto:.2f}%\nTotal Esquerda:{Total_Esquerdas}\nMédia de tempo: {media_tempo_jogoum:.2f}")
             inciarJogoDois.configure(state=NORMAL)
             informationJogo.configure(state=NORMAL)
             FimDeJogo()
@@ -172,10 +202,6 @@ def IniciarJogo():
         new_window.after(500, lambda :canvas.create_image(390, 170, image=nota_50_photo))
         new_window.after(1000, lambda: canvas.delete("all"))
         new_window.after(500, lambda: button_clicked.configure(fg_color='SystemButtonFace'))  # Restaura a cor original
-        new_window.after(10, lambda: BTNDireita.configure(state=DISABLED))
-        new_window.after(1000, lambda: BTNDireita.configure(state=NORMAL))
-        new_window.after(10, lambda: BTNEsquerda.configure(state=DISABLED))
-        new_window.after(1000, lambda: BTNEsquerda.configure(state=NORMAL))
         new_window.after(1000, start_timer)
         rodada = rodadas.pop(0)
         if rodada == "esquerda":
@@ -196,14 +222,11 @@ def IniciarJogo():
         tempos_resposta.append(tempo_decorrido)
 
         media_tempo_jogoum = sum(tempos_resposta) / len(tempos_resposta)
-
         if not rodadas:
             # Calcula a porcentagem de acerto
             percentual_acerto = (acerto / total_rodadas) * 100
 
             stop_timer()
-            timer_label.config(font=40, foreground='#fff', background='#000',
-                            text=f"Fim do jogo!\nAcumulado R$:{pontos}\nAcertos:{acerto}/{total_rodadas} - {percentual_acerto:.2f}%\nTotal Esquerda:{Total_Esquerdas}\nMédia de tempo: {media_tempo_jogoum:.2f}")
             inciarJogoDois.configure(state=NORMAL)
             informationJogo.configure(state=NORMAL)
             FimDeJogo()
@@ -215,16 +238,13 @@ def IniciarJogo():
 
             return
 
+
         button_clicked.configure(fg_color='red')  # Muda a cor para vermelho
         stop_timer()
         pontos += 5
         new_window.after(500, lambda :canvas.create_image(390, 170, image=nota_5_photo))
         new_window.after(1000, lambda: canvas.delete("all"))
         new_window.after(500, lambda: button_clicked.configure(fg_color='SystemButtonFace'))  # Restaura a cor original
-        new_window.after(10, lambda: BTNDireita.configure(state=DISABLED))
-        new_window.after(1000, lambda: BTNDireita.configure(state=NORMAL))
-        new_window.after(10, lambda: BTNEsquerda.configure(state=DISABLED))
-        new_window.after(1000, lambda: BTNEsquerda.configure(state=NORMAL))
         new_window.after(1000, start_timer)
         rodada = rodadas.pop(0)
         if rodada == "esquerda":
