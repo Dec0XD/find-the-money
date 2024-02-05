@@ -50,29 +50,38 @@ Obs: Você pode alterar esses valores escrevendo em suas respectivas caixas."""
     instruçoes3.geometry("{}x{}+{}+{}".format(largura, altura, 0, 0))
 
 def IniciarJogo():
-    global tempo_inicio
+    global tempo_inicio, tempo_total
     botao_vermelho_clicado = False
     botoes_desativados = False
-
+    tempo_inicio = time.time()
+    
     def mudar_cor_circulo():
-        global tempo_inicio
+        global tempo_total
         nonlocal botao_vermelho_clicado, botoes_desativados
         canvas_circulo.itemconfigure(circulo, fill='green')
-        tempo_inicio = time.time()
         timer_label.config(font=40, foreground='#fff', background='#000', text="")
-        botoes_desativados = True
+        botoes_desativados = False
         BTNDireita.configure(state=NORMAL)
         BTNEsquerda.configure(state=NORMAL)
+        tempo_total = 5
         start_timer()
 
     def restaurar_botoes():
+        global tempo_total
         nonlocal botao_vermelho_clicado, botoes_desativados
         if not botao_vermelho_clicado:
             canvas_circulo.itemconfigure(circulo, fill='red')
-            botoes_desativados = False
+            tempo_total = 2
+            botoes_desativados = True
             BTNDireita.configure(state=DISABLED)
             BTNEsquerda.configure(state=DISABLED)
-            
+             
+    def verificar_tempo_excedido():
+        global tempo_inicio
+        nonlocal botao_vermelho_clicado, botoes_desativados
+        if botoes_desativados and time.time() - tempo_inicio > 2:
+            restaurar_botoes()
+            FimDeJogo()          
             
     new_window = Toplevel(app)
     new_window.geometry("{}x{}+0+0".format(new_window.winfo_screenwidth(), new_window.winfo_screenheight()))
@@ -137,14 +146,8 @@ def IniciarJogo():
     acerto = 0
     Total_Esquerdas = 0 
     duracao = 0
+    media_tempo_jogoum = 0
     
-    def FimDeJogo():
-        percentual_acerto = (acerto / total_rodadas) * 100
-        timer_label.config(font=40, foreground='#fff', background='#000',
-                            text=f"Fim do jogo!\nAcumulado R$:{pontos}\nAcertos:{acerto}/{total_rodadas} - {percentual_acerto:.2f}%\nTotal Esquerda:{Total_Esquerdas}\nMédia de tempo: {media_tempo_jogoum:.2f}")
-        new_window.after(10, lambda: BTNDireita.configure(state=DISABLED))
-        new_window.after(10, lambda: BTNEsquerda.configure(state=DISABLED))
-           
     tempos_resposta = []
     def acertou(button_clicked):
         restaurar_botoes()
@@ -156,11 +159,7 @@ def IniciarJogo():
         tempos_resposta.append(tempo_decorrido)
 
         media_tempo_jogoum = sum(tempos_resposta) / len(tempos_resposta)
-
-        if not rodadas:
-                    # Calcula a porcentagem de acerto
-            percentual_acerto = (acerto / total_rodadas) * 100
-
+        if not rodadas:        
             stop_timer()
             inciarJogoDois.configure(state=NORMAL)
             informationJogo.configure(state=NORMAL)
@@ -205,9 +204,6 @@ def IniciarJogo():
 
         media_tempo_jogoum = sum(tempos_resposta) / len(tempos_resposta)
         if not rodadas:
-            # Calcula a porcentagem de acerto
-            percentual_acerto = (acerto / total_rodadas) * 100
-
             stop_timer()
             inciarJogoDois.configure(state=NORMAL)
             informationJogo.configure(state=NORMAL)
@@ -219,7 +215,6 @@ def IniciarJogo():
                 writer.writerow([pontos, acerto, Total_Esquerdas, media_tempo_jogoum])
 
             return
-
 
         button_clicked.configure(fg_color='red')  # Muda a cor para vermelho
         stop_timer()
@@ -247,6 +242,14 @@ def IniciarJogo():
             nota_5 = BTNEsquerda
         nota_50.configure(command=lambda: acertou(nota_50))
         nota_5.configure(command=lambda: errou(nota_5))
+        
+    def FimDeJogo():
+        percentual_acerto = (acerto / total_rodadas) * 100
+        timer_label.config(font=40, foreground='#fff', background='#000',
+                            text=f"Fim do jogo!\nAcumulado R$:{pontos}\nAcertos:{acerto}/{total_rodadas} - {percentual_acerto:.2f}%\nTotal Esquerda:{Total_Esquerdas}\nMédia de tempo: {media_tempo_jogoum:.2f}")
+        new_window.after(10, lambda: BTNDireita.configure(state=DISABLED))
+        new_window.after(10, lambda: BTNEsquerda.configure(state=DISABLED))
+        new_window.after(10, lambda: canvas_circulo.configure(state=DISABLED))      
 
     # Cria um temporizador
     tempo_total = 5
@@ -267,14 +270,14 @@ def IniciarJogo():
     def countdown():
         nonlocal tempo_restante
         if tempo_restante < tempo_total and not pausar_temporizador:
-            tempo_restante += 1
+            tempo_restante += 0.5
             timer_label.configure(background='black')
             progress['value'] = tempo_restante  # Atualiza a barra de progresso
-            new_window.after(1000, countdown)
+            new_window.after(500, countdown)
         elif tempo_restante >= tempo_total:
             timer_label.config(font=40, foreground='#fff', background='#000', text="")
             canvas_circulo.configure(state=DISABLED)
-            FimDeJogo()
+            verificar_tempo_excedido()
 
     def start_timer():
         if not rodadas:  # Se todas as rodadas foram concluídas
