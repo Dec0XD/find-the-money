@@ -78,7 +78,7 @@ def IniciarJogo():
         start_timer()
              
     def verificar_tempo_excedido():
-        global tempo_inicio
+        global tempo_inicio, tempo_fim
         nonlocal botao_vermelho_clicado, botoes_desativados
         if botoes_desativados and time.time() - tempo_inicio > tempo_total:
             restaurar_botoes()
@@ -156,10 +156,12 @@ def IniciarJogo():
         duracao = tempo_inicio
         tempo_fim = time.time()
         tempo_decorrido = (tempo_fim - tempo_inicio)
-        tempo_inicio = time.time()
+        
         tempos_resposta.append(tempo_decorrido)
-
-        media_tempo_jogoum = sum(tempos_resposta) / len(tempos_resposta)
+        if media_tempo_jogoum >= 5:
+            media_tempo_jogoum = 5
+        else:
+            media_tempo_jogoum = sum(tempos_resposta) / len(tempos_resposta)    
 
         if not rodadas or time.time() - tempo_inicio > tempo_total:
             stop_timer()
@@ -201,10 +203,13 @@ def IniciarJogo():
         duracao = tempo_inicio
         tempo_fim = time.time()
         tempo_decorrido = (tempo_fim - tempo_inicio)
-        tempo_inicio = time.time()
+        
         tempos_resposta.append(tempo_decorrido)
-
-        media_tempo_jogoum = sum(tempos_resposta) / len(tempos_resposta)
+        
+        if media_tempo_jogoum >= 5:
+            media_tempo_jogoum = 5
+        else:
+            media_tempo_jogoum = sum(tempos_resposta) / len(tempos_resposta)    
 
         if not rodadas or time.time() - tempo_inicio > tempo_total:
             stop_timer()
@@ -247,6 +252,9 @@ def IniciarJogo():
         nota_5.configure(command=lambda: errou(nota_5))
         
     def FimDeJogo():
+        global media_tempo_jogoum
+        if media_tempo_jogoum >= 5:
+            media_tempo_jogoum = 5
         percentual_acerto = (acerto / total_rodadas) * 100
         timer_label.config(font=40, foreground='#fff', background='#000',
                             text=f"Fim do jogo!\nAcumulado R$:{pontos}\nAcertos:{acerto}/{total_rodadas} - {percentual_acerto:.2f}%\nTotal Esquerda:{Total_Esquerdas}\nMédia de tempo: {media_tempo_jogoum:.2f}")
@@ -273,7 +281,7 @@ def IniciarJogo():
         nonlocal tempo_restante
         with lock:
             if tempo_restante < tempo_total and not pausar_temporizador:
-                tempo_restante += 0.1  # Reduzi a incrementação para 0.1 segundos para maior precisão
+                tempo_restante += 0.1  # incrementação para 0.1 segundos para maior precisão
                 timer_label.configure(background='black')
                 progress['value'] = tempo_restante  # Atualiza a barra de progresso
                 new_window.after(100, countdown)
@@ -406,7 +414,7 @@ def iniciarSegundoJogo():
     rodadas = ["esquerda"] * rodadas_esquerdaJogoDois + ["direita"] * (total_rodadas - rodadas_esquerdaJogoDois)
     random.shuffle(rodadas)
     
-    global pontos, acerto, Total_Esquerdas
+    global pontos, acerto, Total_Esquerdas, tempo_fim
     pontos = 0 
     acerto = 0
     Total_Esquerdas = 0 
@@ -415,7 +423,7 @@ def iniciarSegundoJogo():
     tempos_resposta = []
     def acertou(button_clicked):
         restaurar_botoes()
-        global tempo_inicio, pontos, acerto, quantidadetempo
+        global tempo_inicio, pontos, acerto, quantidadetempo, tempo_fim
         tempo_fim = time.time()
         tempo_decorrido = tempo_fim - tempo_inicio
         tempo_inicio = time.time()
@@ -504,6 +512,9 @@ def iniciarSegundoJogo():
         nota_5.configure(command=lambda: errou(nota_5))
 
     def FimDeJogo():
+        global media_tempo_jogoum
+        if media_tempo_jogoum >= 5:
+            media_tempo_jogoum = 5
         percentual_acerto = (acerto / total_rodadas) * 100
         timer_label.config(font=40, foreground='#fff', background='#000',
                             text=f"Fim do jogo!\nAcumulado R$:{pontos}\nAcertos:{acerto}/{total_rodadas} - {percentual_acerto:.2f}%\nTotal Esquerda:{Total_Esquerdas}\nMédia de tempo: {media_tempo_jogoum:.2f}")
