@@ -151,7 +151,6 @@ def IniciarJogo():
     
     tempos_resposta = []
     def acertou(button_clicked):
-        restaurar_botoes()
         global tempo_inicio, pontos, acerto, Total_Esquerdas, duracao, media_tempo_jogoum
         duracao = tempo_inicio
         tempo_fim = time.time()
@@ -175,8 +174,6 @@ def IniciarJogo():
                 writer.writerow([pontos, acerto, Total_Esquerdas, media_tempo_jogoum])
 
             return
-
-        button_clicked.configure(fg_color='red')  # Muda a cor para vermelho
         
         stop_timer()
         pontos += 50
@@ -187,6 +184,7 @@ def IniciarJogo():
         new_window.after(1000, lambda: canvas.delete("all"))
         new_window.after(500, lambda: button_clicked.configure(fg_color='SystemButtonFace'))  # Restaura a cor original
         new_window.after(1000, start_timer)
+        new_window.after(1000, restaurar_botoes)
         rodada = rodadas.pop(0)
         if rodada == "esquerda":
             nota_50 = BTNEsquerda
@@ -198,7 +196,6 @@ def IniciarJogo():
         nota_5.configure(command=lambda: errou(nota_5))
 
     def errou(button_clicked):
-        restaurar_botoes()
         global tempo_inicio, pontos, acerto, Total_Esquerdas, duracao, media_tempo_jogoum
         duracao = tempo_inicio
         tempo_fim = time.time()
@@ -224,13 +221,13 @@ def IniciarJogo():
 
             return
 
-        button_clicked.configure(fg_color='red')  # Muda a cor para vermelho
         stop_timer()
         pontos += 5
         new_window.after(500, lambda :canvas.create_image(390, 170, image=nota_5_photo))
         new_window.after(1000, lambda: canvas.delete("all"))
         new_window.after(500, lambda: button_clicked.configure(fg_color='SystemButtonFace'))  # Restaura a cor original
         new_window.after(1000, start_timer)
+        new_window.after(1000, restaurar_botoes)
         rodada = rodadas.pop(0)
         if rodada == "esquerda":
             nota_50 = BTNEsquerda
