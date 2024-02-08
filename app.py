@@ -618,6 +618,7 @@ sidebar_frame.pack_propagate(0)
 sidebar_frame.pack(fill="y", anchor="w", side="left")
 
 #carregando a foto do GPDOC
+CTkLabel(master=sidebar_frame, text="Copyright by Dec0", font=("Arial Bold", 12), text_color="#fff").pack(pady=(10, 0), anchor="center")
 logo_path = os.path.dirname(os.path.abspath(__file__))
 image_logo_path = os.path.join(logo_path, 'assets/GPDOC.png')
 logo_img_data = Image.open(image_logo_path)
