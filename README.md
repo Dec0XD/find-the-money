@@ -62,7 +62,7 @@ Agradecemos às seguintes pessoas que contribuíram para este projeto:
     </td>
     <td align="center">
       <a href="#" title="defina o titulo do link">
-        <img src="" width="100px;" alt="Foto do Daniel"/><br>
+        <img src="https://avatars.githubusercontent.com/u/37807018?v=4" width="100px;" alt="Foto do Daniel"/><br>
         <sub>
           <b>Daniel Almeida</b>
           <br>
