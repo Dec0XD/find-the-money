@@ -285,7 +285,6 @@ def IniciarJogo():
                 timer_label.configure(background='black')
                 progress['value'] = tempo_restante  # Atualiza a barra de progresso
                 new_window.after(100, countdown)
-                print(tempo_restante)
             elif tempo_restante >= tempo_total:
                 timer_label.config(font=40, foreground='#fff', background='#000', text="Acabou o Tempo!")
                 canvas_circulo.configure(state=DISABLED)
