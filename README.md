@@ -1,12 +1,6 @@
 # Jogo Find the money
 
-![GitHub repo size](https://img.shields.io/github/repo-size/Dec0XD/README-template?style=for-the-badge)
-![GitHub language count](https://img.shields.io/github/languages/count/Dec0XD/README-template?style=for-the-badge)
-![GitHub forks](https://img.shields.io/github/forks/Dec0XD/README-template?style=for-the-badge)
-![Bitbucket open issues](https://img.shields.io/bitbucket/issues/Dec0XD/README-template?style=for-the-badge)
-![Bitbucket open pull requests](https://img.shields.io/bitbucket/pr-raw/Dec0XD/README-template?style=for-the-badge)
-
-<img src="![IMG tela do jogo](assets/jogo.png)" alt="Exemplo imagem">
+<img src="assets/jogo.png" alt="Exemplo imagem">
 
 > Este é um jogo simples onde o jogador deve encontrar a nota de R$ 50 ou R$ 100 em diferentes rodadas. O jogo é dividido em duas fases, cada uma com suas próprias regras.
 
@@ -58,17 +52,9 @@ Agradecemos às seguintes pessoas que contribuíram para este projeto:
   <tr>
     <td align="center">
       <a href="#" title="defina o titulo do link">
-        <img src="https://avatars3.githubusercontent.com/u/31936044" width="100px;" alt="Foto do André no GitHub"/><br>
+        <img src="https://avatars.githubusercontent.com/u/83669560?s=400&u=a115c0e277676ced8fa42a0c26b2e490795ea325&v=4" width="100px;" alt="Foto do André no GitHub"/><br>
         <sub>
           <b>André Coêlho</b>
-        </sub>
-      </a>
-    </td>
-    <td align="center">
-      <a href="#" title="defina o titulo do link">
-        <img src="https://s2.glbimg.com/FUcw2usZfSTL6yCCGj3L3v3SpJ8=/smart/e.glbimg.com/og/ed/f/original/2019/04/25/zuckerberg_podcast.jpg" width="100px;" alt="Foto do Mark Zuckerberg"/><br>
-        <sub>
-          <b>Mark Zuckerberg</b>
         </sub>
       </a>
     </td>
