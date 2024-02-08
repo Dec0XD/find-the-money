@@ -55,6 +55,18 @@ Agradecemos às seguintes pessoas que contribuíram para este projeto:
         <img src="https://avatars.githubusercontent.com/u/83669560?s=400&u=a115c0e277676ced8fa42a0c26b2e490795ea325&v=4" width="100px;" alt="Foto do André no GitHub"/><br>
         <sub>
           <b>André Coêlho</b>
+          <b>Contribuidor</b>
+        </sub>
+      </a>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="#" title="defina o titulo do link">
+        <img src="" width="100px;" alt="Foto do André no GitHub"/><br>
+        <sub>
+          <b>Daniel Almeida</b>
+          <b>Orientador</b>
         </sub>
       </a>
     </td>
