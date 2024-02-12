@@ -176,6 +176,7 @@ def IniciarJogo():
                 writer.writerow([pontos, acerto, Total_Esquerdas, media_tempo_jogoum])
 
             return
+        button_clicked.configure(fg_color='red')  # Muda a cor para vermelho
         
         stop_timer()
         pontos += 50
@@ -222,6 +223,7 @@ def IniciarJogo():
                 writer.writerow([pontos, acerto, Total_Esquerdas, media_tempo_jogoum])
 
             return
+        button_clicked.configure(fg_color='red')  # Muda a cor para vermelho
 
         stop_timer()
         pontos += 5
